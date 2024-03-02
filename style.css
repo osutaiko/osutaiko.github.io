@@ -1,0 +1,146 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #fff;
+  color: #000;
+  margin: 0;
+  padding: 0;
+}
+
+.navigation-bar {
+  width: 100%;
+  margin: 0 auto;
+  margin-bottom: 50px;
+  display: flex;
+  padding: 15px 15px 15px 15px;
+  background-color: #fff;
+  border-bottom: 2px solid #ddd;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.container-transparent {
+  width: 80%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  padding: 0;
+  background-color: none;
+  border: none;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.container {
+  width: 80%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  padding: 15px 15px 15px 15px;
+  background-color: #fff;
+  border: 2px solid #ddd;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.logo {
+  margin: 0;
+}
+
+h1 {
+  font-size: 30px;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-size: 24px;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 16px;
+  color: #444;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  cursor: pointer;
+  background-color: #ddd;
+  color: #000;
+}
+
+button:hover {
+  background-color: #eee;
+}
+
+.column {
+  flex: 1;
+  padding-left: 30px;
+  position: relative;
+}
+
+.column + .column::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  background-color: #ddd;
+}
+
+.column:nth-child(1) {
+  flex: 1;
+}
+
+.column:nth-child(2) {
+  flex: 5;
+}
+
+.gamemode-list li a {
+  display: block;
+  padding: 5px;
+  text-decoration: none;
+  color: #333;
+  font-size: 18px;
+}
+
+@media screen and (max-width: 1024px) {
+  .container-transparent {
+    width: 90%;
+  }
+
+  .container {
+    width: 90%;
+  }
+
+  .column {
+    padding-left: 20px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .container-transparent {
+    width: 100%;
+  }
+
+  .container {
+    width: 100%;
+    border-left: none;
+    border-right: none;
+  }
+
+  .column {
+    padding-left: 10px;
+  }
+}
