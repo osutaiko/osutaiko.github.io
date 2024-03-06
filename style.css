@@ -163,30 +163,32 @@ button:hover {
   justify-content: center;
   align-items: center;
   color: #000;
-  border: 1px solid #777;
+  border: 1px solid #aaa;
   box-sizing: border-box;
   user-select: none;
-  font-size: 16px;
+  font-size: 18px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 900;
 }
 
 .board > [data-status="hidden"] {
-  background-color: #ddd;
+  background-color: #eee;
 }
 
 .board > [data-status="mine"] {
-  background-color: #aaa;
+  background-color: #ccc;
 }
 
 .board > [data-status="revealed"] {
-  background-color: #aaa;
+  background-color: #ccc;
 }
 
 .board > [data-status="flagged"] {
-  background-color: #ddd;
+  background-color: #eee;
 }
 
 .board > [data-status="mine"]:after {
-  content: "💣";
+  content: "☹️";
 }
 
 .board > [data-status="revealed"]:after {

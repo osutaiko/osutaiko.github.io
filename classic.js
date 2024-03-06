@@ -112,6 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (mines.length === 0) {
             adjacentTiles.forEach(revealTile.bind(null, board));
         } else {
+            const numberColors = ['#4600ff', '#008809', '#ff0000', '#1e007c', '#8e0000', '#008483', '#000000', '#808080'];
+            const number = mines.length;
+            tile.element.textContent = number;
+            tile.element.style.color = numberColors[number - 1];
             tile.element.textContent = mines.length;
         }
     }
@@ -187,7 +191,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (tile.status !== TILE_STATUSES.FLAGGED && tile.hasMine) {
                         tile.status = TILE_STATUSES.MINE;
                     } else if (tile.status === TILE_STATUSES.FLAGGED && !tile.hasMine) {
-                        tile.status = TILE_STATUSES.MINE;
                         tile.element.innerHTML += '<span class="red-x">❌</span>'; // Include the 'X' span
                     }
                 });
