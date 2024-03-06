@@ -145,7 +145,28 @@ button:hover {
   }
 }
 
+.board-info-bar {
+  width: calc(var(--board-width) * 25px + 10px);
+  height: 65px;
+  background-color: #eee;
+  border: 5px solid #777;
+  margin-bottom: -5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  font-size: 20px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 900;
+}
 
+#status-button {
+  padding: 5px 5px;
+  font-size: 34px;
+  border: 5px ;
+  cursor: pointer;
+  background-color: #eee;
+}
 
 .board {
   display: inline-grid;
@@ -188,7 +209,7 @@ button:hover {
 }
 
 .board > [data-status="mine"]:after {
-  content: "☹️";
+  content: "💀";
 }
 
 .board > [data-status="revealed"]:after {

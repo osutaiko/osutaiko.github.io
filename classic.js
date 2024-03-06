@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (is_win) {
-            messageText.textContent = 'You Win!';
+            statusButton.textContent = '😎';
             board.forEach(row => {
                 row.forEach(tile => {
                     if (tile.hasMine && tile.status !== TILE_STATUSES.FLAGGED) {
@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (is_loss) {
-            messageText.textContent = 'You Lost!';
+            statusButton.textContent = '😵';
 
             board.forEach(row => {
                 row.forEach(tile => {
@@ -234,16 +234,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const selectedDifficulty = 'expert';
+    const selectedDifficulty = 'beginner';
     const { height, width, totalMines } = getDifficultySettings(selectedDifficulty);
 
     const board = createBoard(height, width, totalMines);
+    const infobarElement = document.querySelector('.board-info-bar');
     const boardElement = document.querySelector('.board');
     const minesLeftText = document.querySelector('[mines-left]');
-    const messageText = document.querySelector('.subtext');
+    const statusButton = document.querySelector('#status-button');
 
     boardElement.style.setProperty('--board-height', height);
     boardElement.style.setProperty('--board-width', width);
+    infobarElement.style.setProperty('--board-width', width);
 
     minesLeftText.textContent = totalMines;
 
