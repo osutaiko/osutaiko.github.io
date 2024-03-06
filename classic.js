@@ -193,6 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (is_win) {
             statusButton.textContent = '😎';
+            minesLeftText.textContent = '0';
             board.forEach(row => {
                 row.forEach(tile => {
                     if (tile.hasMine && tile.status !== TILE_STATUSES.FLAGGED) {
@@ -210,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (tile.status !== TILE_STATUSES.FLAGGED && tile.hasMine) {
                         tile.status = TILE_STATUSES.MINE;
                     } else if (tile.status === TILE_STATUSES.FLAGGED && !tile.hasMine) {
-                        tile.element.innerHTML += '<span class="red-x">❌</span>'; // Include the 'X' span
+                        tile.element.innerHTML += '<span class="red-x">❌</span>';
                     }
                 });
             });
