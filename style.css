@@ -12,7 +12,7 @@ body {
   padding: 0;
 }
 
-.navigation-bar {
+#navigation-bar {
   width: 100%;
   margin: 0 auto;
   margin-bottom: 50px;
@@ -143,4 +143,60 @@ button:hover {
   .column {
     padding-left: 10px;
   }
+}
+
+
+
+.board {
+  display: inline-grid;
+  grid-template-columns: repeat(var(--board-width), 25px);
+  grid-template-rows: repeat(var(--board-height), 25px);
+  background-color: #777;
+  border: 5px solid #777;
+  border-collapse: collapse;
+}
+
+.board > * {
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #000;
+  border: 1px solid #777;
+  box-sizing: border-box;
+  user-select: none;
+  font-size: 16px;
+}
+
+.board > [data-status="hidden"] {
+  background-color: #ddd;
+}
+
+.board > [data-status="mine"] {
+  background-color: #aaa;
+}
+
+.board > [data-status="revealed"] {
+  background-color: #aaa;
+}
+
+.board > [data-status="flagged"] {
+  background-color: #ddd;
+}
+
+.board > [data-status="mine"]:after {
+  content: "💣";
+}
+
+.board > [data-status="revealed"]:after {
+  content: "";
+}
+
+.board > [data-status="flagged"]:after {
+  content: "🚩";
+}
+
+.board > [data-status="flagged"][data-has-mine="true"]:after {
+  content: "❌";
 }
