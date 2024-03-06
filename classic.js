@@ -12,6 +12,21 @@ document.addEventListener('DOMContentLoaded', () => {
         FLAGGED: 'flagged'
     };
 
+    let timerInterval;
+    let elapsedTime = 0;
+    const timerElement = document.getElementById('timer');
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            elapsedTime += 0.01;
+            timerElement.textContent = elapsedTime.toFixed(2);
+        }, 10);
+    }
+
+    function stopTimer() {
+        clearInterval(timerInterval);
+    }
+
     let isFirstClick = true;
     let lastRevealedTile = null;
 
@@ -78,6 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function revealTile(board, tile) {
         if (isFirstClick) {
+            startTimer();
+
             if (tile.hasMine) {
                 const newMinePosition = {
                     i: randomNumber(board.length),
@@ -168,6 +185,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const is_loss = checkLoss();
 
         if (is_win || is_loss) {
+            stopTimer();
+
             boardElement.addEventListener('mousedown', stopProp, { capture: true });
             boardElement.addEventListener('mouseup', stopProp, { capture: true });
         }
@@ -281,4 +300,15 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
+
+    statusButton.addEventListener('click', () =>{
+        location.reload();
+    })
+
+    document.addEventListener('keydown', e => {
+        if (e.key === ' ' || e.key === 'Spacebar'){
+            e.preventDefault();
+            location.reload();
+        }
+    })
 });
