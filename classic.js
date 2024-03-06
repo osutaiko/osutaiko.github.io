@@ -254,7 +254,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const selectedDifficulty = 'beginner';
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedDifficulty = urlParams.get('difficulty') || 'beginner';
     const { height, width, totalMines } = getDifficultySettings(selectedDifficulty);
 
     const board = createBoard(height, width, totalMines);
@@ -263,11 +264,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const minesLeftText = document.querySelector('[mines-left]');
     const statusButton = document.querySelector('#status-button');
 
+    // Set board height and width
     boardElement.style.setProperty('--board-height', height);
     boardElement.style.setProperty('--board-width', width);
     infobarElement.style.setProperty('--board-width', width);
 
+    // Display total mines left
     minesLeftText.textContent = totalMines;
+
+    // Attach click event listeners to difficulty options
+    const difficultyOptions = document.querySelectorAll('.difficulty-option');
+    difficultyOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            const selectedDifficulty = option.id;
+            const { height, width, totalMines } = getDifficultySettings(selectedDifficulty);
+            // Reload the page with the new difficulty
+            window.location.href = `${window.location.origin}${window.location.pathname}?difficulty=${selectedDifficulty}`;
+        });
+    });
 
     let isLeftButtonDown = false;
     let isRightButtonDown = false;
