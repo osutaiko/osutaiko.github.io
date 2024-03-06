@@ -166,7 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (is_win || is_loss) {
             boardElement.addEventListener('mousedown', stopProp, { capture: true });
             boardElement.addEventListener('mouseup', stopProp, { capture: true });
-            boardElement.addEventListener('contextmenu', stopProp, { capture: true });
         }
 
         if (is_win) {
@@ -195,8 +194,10 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (lastRevealedTile) {
-                lastRevealedTile.element.style.backgroundColor = 'red';
+                if (lastRevealedTile.status === TILE_STATUSES.MINE)
+                    lastRevealedTile.element.style.backgroundColor = 'red';
             }
+                
         }
     }
 
