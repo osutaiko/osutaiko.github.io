@@ -12,7 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
         FLAGGED: 'flagged'
     };
 
-    let firstClick = true;
+    let isFirstClick = true;
+    let lastRevealedTile = null;
 
     function getDifficultySettings(difficulty) {
         const settings = DIFFICULTIES.find(level => level.name === difficulty);
@@ -37,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     element,
                     i,
                     j,
-                    has_mine: minePositions.some(positionMatch.bind(null, { i, j })),
+                    hasMine: minePositions.some(positionMatch.bind(null, { i, j })),
 
                     get status() {
                         return this.element.dataset.status;
@@ -76,8 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function revealTile(board, tile) {
-        if (firstClick) {
-            if (tile.has_mine) {
+        if (isFirstClick) {
+            if (tile.hasMine) {
                 const newMinePosition = {
                     i: randomNumber(board.length),
                     j: randomNumber(board[0].length)
@@ -89,22 +90,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 const newTile = board[newMinePosition.i][newMinePosition.j];
-                tile.has_mine = false;
-                newTile.has_mine = true;
+                tile.hasMine = false;
+                newTile.hasMine = true;
             }
-            firstClick = false;
+            isFirstClick = false;
         }
+
+        lastRevealedTile = tile;
 
         if (tile.status != TILE_STATUSES.HIDDEN) return;
 
-        if (tile.has_mine) {
+        if (tile.hasMine) {
             tile.status = TILE_STATUSES.MINE;
             return;
         }
 
         tile.status = TILE_STATUSES.REVEALED;
         const adjacentTiles = nearbyTiles(board, tile);
-        const mines = adjacentTiles.filter(t => t.has_mine);
+        const mines = adjacentTiles.filter(t => t.hasMine);
 
         if (mines.length === 0) {
             adjacentTiles.forEach(revealTile.bind(null, board));
@@ -140,15 +143,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return tiles;
     }
 
-    function checkWin(board) {
+    function checkWin() {
         return board.every(row => {
             return row.every(tile => {
-                return tile.status === TILE_STATUSES.REVEALED || (tile.has_mine && (tile.status === TILE_STATUSES.HIDDEN || tile.status === TILE_STATUSES.FLAGGED));
+                return tile.status === TILE_STATUSES.REVEALED || (tile.hasMine && (tile.status === TILE_STATUSES.HIDDEN || tile.status === TILE_STATUSES.FLAGGED));
             });
         });
     }
 
-    function checkLoss(board) {
+    function checkLoss() {
         return board.some(row => {
             return row.some(tile => {
                 return tile.status === TILE_STATUSES.MINE;
@@ -156,9 +159,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function checkGameEnd(board) {
-        const is_win = checkWin(board);
-        const is_loss = checkLoss(board);
+    function checkGameEnd() {
+        const is_win = checkWin();
+        const is_loss = checkLoss();
 
         if (is_win || is_loss) {
             boardElement.addEventListener('mousedown', stopProp, { capture: true });
@@ -170,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
             messageText.textContent = 'You Win!';
             board.forEach(row => {
                 row.forEach(tile => {
-                    if (tile.has_mine && tile.status !== TILE_STATUSES.FLAGGED) {
+                    if (tile.hasMine && tile.status !== TILE_STATUSES.FLAGGED) {
                         flagTile(tile);
                     }
                 });
@@ -179,15 +182,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (is_loss) {
             messageText.textContent = 'You Lost!';
+
             board.forEach(row => {
                 row.forEach(tile => {
-                    if (tile.has_mine && tile.status !== TILE_STATUSES.FLAGGED) {
-                        tile.element.dataset.status = TILE_STATUSES.MINE; 
+                    if (tile.status !== TILE_STATUSES.FLAGGED && tile.hasMine) {
+                        tile.status = TILE_STATUSES.MINE;
+                    } else if (tile.status === TILE_STATUSES.FLAGGED && !tile.hasMine) {
+                        tile.status = TILE_STATUSES.MINE;
+                        tile.element.innerHTML += '<span class="red-x">❌</span>'; // Include the 'X' span
                     }
                 });
             });
+
+            if (lastRevealedTile) {
+                lastRevealedTile.element.style.backgroundColor = 'red';
+            }
         }
     }
+
+    
 
     function stopProp(e) {
         e.stopImmediatePropagation();
@@ -196,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleTileClick(board, tile) {
         if (tile.status === TILE_STATUSES.HIDDEN) {
             revealTile(board, tile);
-            checkGameEnd(board);
+            checkGameEnd();
         }
     }
 
@@ -211,13 +224,13 @@ document.addEventListener('DOMContentLoaded', () => {
             nearbyTiles(board, tile).forEach(neighbor => {
                 if (neighbor.status === TILE_STATUSES.HIDDEN) {
                     revealTile(board, neighbor);
-                    checkGameEnd(board);
+                    checkGameEnd();
                 }
             });
         }
     }
 
-    const selectedDifficulty = 'beginner';
+    const selectedDifficulty = 'expert';
     const { height, width, totalMines } = getDifficultySettings(selectedDifficulty);
 
     const board = createBoard(height, width, totalMines);

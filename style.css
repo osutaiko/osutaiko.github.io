@@ -200,3 +200,7 @@ button:hover {
 .board > [data-status="flagged"][data-has-mine="true"]:after {
   content: "❌";
 }
+
+.red-x {
+  position: absolute;
+}
