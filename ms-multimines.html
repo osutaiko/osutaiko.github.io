@@ -15,7 +15,27 @@
     <div id="navigation-bar">
       <div class="container-transparent">
         <h1 class="logo">Minesweeper Variants</h1>
-        <button id="login-button" class="button">Login</button>
+        <div class="buttons-right">
+          <button id="help-button" class="button">How to Play</button>
+          <button id="mytimes-button" class="button">My Times</button>
+          <button id="login-button" class="button">Login</button>
+        </div>
+      </div>
+    </div>
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Classic</h2>
+          <p>The classic Minesweeper we all know and love. To win, reveal all safe tiles without clicking on any mines. 
+            Numbered tiles indicate the number of mines hidden in the adjacent eight tiles.</p>
+        <h2>Multimines</h2>
+          <p>Minesweeper but with up to four mines per tile.</p>
+        <ul class = "modal-list">
+          <li>[Space]: Restart game</li>
+          <li>[Left Click]: Reveal tile</li>
+          <li>[Right Click]: Flag tile</li>
+          <li>[Left+Right Click]: Chord on number tile</li>
+        </ul>
       </div>
     </div>
   </header>
@@ -32,8 +52,8 @@
       <h2>Multimines</h2>
       <div id="difficulty-selector">
         <button class="difficulty-option" id="beginner">Beginner</span>
-          <button class="difficulty-option" id="intermediate">Intermediate</span>
-            <button class="difficulty-option" id="expert">Expert</span>
+        <button class="difficulty-option" id="intermediate">Intermediate</span>
+        <button class="difficulty-option" id="expert">Expert</span>
       </div>
       <br>
       <div class="board-info-bar">
