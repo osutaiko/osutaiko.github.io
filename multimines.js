@@ -1,23 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
     /* Constants and Variables */
     const DIFFICULTIES = [
-        { name: 'beginner', height: 8, width: 8, totalMines: 10 },
-        { name: 'intermediate', height: 16, width: 16, totalMines: 40 },
-        { name: 'expert', height: 16, width: 30, totalMines: 99 }
+        { name: 'beginner', height: 8, width: 8, totalMineTiles: 10 },
+        { name: 'intermediate', height: 16, width: 16, totalMineTiles: 40 },
+        { name: 'expert', height: 16, width: 30, totalMineTiles: 99 }
     ];
 
     const TILE_STATUSES = {
         HIDDEN: 'hidden',
-        MINE: 'mine', // Only appears when game is lost
-        REVEALED: 'revealed',
-        FLAGGED: 'flagged'
+        REVEALED: 'revealed'
     };
+
+    for (let i = 1; i <= 4; i++) {
+        TILE_STATUSES[`MINE${i}`] = `mine${i}`;
+        TILE_STATUSES[`FLAGGED${i}`] = `flagged${i}`;
+    }
 
     let timerInterval;
     let elapsedTime = 0;
     let isFirstClick = true; // Turns into false after first tile is revealed
     let lastRevealedTile = null;
     let board; // Variable to hold the game board
+    let totalMineCount = 0;
 
     /* DOM Elements */
     const timerElement = document.getElementById('timer');
@@ -39,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* Functions */
-    function getDifficultySettings(difficulty) { // Returns { height, width, totalMines } corresponding to difficulty
+    function getDifficultySettings(difficulty) { // Returns { height, width, totalMineTiles } corresponding to difficulty
         return DIFFICULTIES.find(level => level.name === difficulty) || null;
     }
 
@@ -51,10 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return a.i === b.i && a.j === b.j;
     }
 
-    function getMinePositions(height, width, totalMines) { // Randomly generates mine locations (retries when mine already exists in list) and returns the list
+    function getMinePositions(height, width, totalMineTiles) { // Randomly generates mine locations (retries when mine already exists in list) and returns the list
         const positions = [];
 
-        while (positions.length < totalMines) {
+        while (positions.length < totalMineTiles) {
             const position = {
                 i: randomNumber(height),
                 j: randomNumber(width)
@@ -68,8 +72,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return positions;
     }
 
-    function createBoard(height, width, totalMines) {
-        const minePositions = getMinePositions(height, width, totalMines);
+    function createBoard(height, width, totalMineTiles) {
+        const minePositions = getMinePositions(height, width, totalMineTiles);
         const newBoard = [];
 
         for (let i = 0; i < height; i++) {
@@ -83,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     i,
                     j,
                     hasMine: minePositions.some(positionMatch.bind(null, { i, j })),
+                    mineCount: 0,
 
                     get status() {
                         return this.element.dataset.status;
@@ -91,6 +96,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         this.element.dataset.status = value;
                     }
                 };
+
+                if (tile.hasMine) {
+                    tile.mineCount = randomNumber(4) + 1;
+                    totalMineCount += tile.mineCount;
+                }
 
                 row.push(tile);
             }
@@ -117,6 +127,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const newTile = board[newMinePosition.i][newMinePosition.j];
                 tile.hasMine = false;
                 newTile.hasMine = true;
+                newTile.mineCount = tile.mineCount;
+                tile.mineCount = 0;
             }
             isFirstClick = false;
         }
@@ -126,37 +138,43 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tile.status != TILE_STATUSES.HIDDEN) return;
 
         if (tile.hasMine) {
-            tile.status = TILE_STATUSES.MINE;
+            tile.status = TILE_STATUSES[`MINE${tile.mineCount}`];
             return;
         }
 
         tile.status = TILE_STATUSES.REVEALED;
         const adjacentTiles = nearbyTiles(tile);
-        const mines = adjacentTiles.filter(t => t.hasMine);
+        const sumMineCount = adjacentTiles.reduce((sum, t) => sum + t.mineCount, 0);
 
-        if (mines.length === 0) {
+        if (sumMineCount === 0) {
             adjacentTiles.forEach(revealTile);
         } else { // Color code the numbers
             const numberColors = ['#4600ff', '#008809', '#ff0000', '#1e007c', '#8e0000', '#008483', '#000000', '#808080'];
-            const number = mines.length;
-            tile.element.textContent = number;
-            tile.element.style.color = numberColors[number - 1];
-            tile.element.textContent = mines.length;
+            tile.element.textContent = sumMineCount;
+            tile.element.style.color = numberColors[(sumMineCount - 1) % 8];
         }
     }
 
-    function flagTile(tile) { // Flag tile if tile is unflagged and v.v.
-        if (tile.status !== TILE_STATUSES.HIDDEN && tile.status !== TILE_STATUSES.FLAGGED) return;
-
-        if (tile.status === TILE_STATUSES.FLAGGED) tile.status = TILE_STATUSES.HIDDEN;
-        else tile.status = TILE_STATUSES.FLAGGED;
+    function flagTile(tile) {
+        const statusOrder = [TILE_STATUSES.HIDDEN, TILE_STATUSES.FLAGGED1, TILE_STATUSES.FLAGGED2, TILE_STATUSES.FLAGGED3, TILE_STATUSES.FLAGGED4];
+    
+        const currentIndex = statusOrder.indexOf(tile.status);
+        if (currentIndex === -1) return;
+    
+        const nextIndex = (currentIndex + 1) % statusOrder.length;
+        tile.status = statusOrder[nextIndex];
     }
 
     function listMinesLeft() { // Updates number of unflagged mines
-        const flaggedTilesCount = board.reduce((count, row) => {
-            return count + row.filter(tile => tile.status === TILE_STATUSES.FLAGGED).length;
-        }, 0);
-        minesLeftText.textContent = totalMines - flaggedTilesCount;
+        let flagCount = 0;
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board[0].length; j++) {
+                if (board[i][j].status.includes('flagged')) {
+                    flagCount += parseInt(board[i][j].status.charAt(board[i][j].status.length - 1));
+                }
+            }
+        }
+        minesLeftText.textContent = totalMineCount - flagCount;
     }
 
     function nearbyTiles({ i, j }) { // Returns list of adjacent tiles
@@ -175,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function checkWin() { // Game won if every safe tile is revealed, and every mine is either flagged or hidden
         return board.every(row => {
             return row.every(tile => {
-                return tile.status === TILE_STATUSES.REVEALED || (tile.hasMine && (tile.status === TILE_STATUSES.HIDDEN || tile.status === TILE_STATUSES.FLAGGED));
+                return tile.status === TILE_STATUSES.REVEALED || (tile.hasMine && (tile.status === TILE_STATUSES.HIDDEN || tile.status.includes('flagged')));
             });
         });
     }
@@ -183,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function checkLoss() { // Game lost if some tile with a mine is revealed (hidden -> mine)
         return board.some(row => {
             return row.some(tile => {
-                return tile.status === TILE_STATUSES.MINE;
+                return tile.status.includes('mine');
             });
         });
     }
@@ -204,8 +222,10 @@ document.addEventListener('DOMContentLoaded', () => {
             minesLeftText.textContent = '0'; // Automatically flag every mine
             board.forEach(row => {
                 row.forEach(tile => {
-                    if (tile.hasMine && tile.status !== TILE_STATUSES.FLAGGED) {
-                        flagTile(tile);
+                    if (tile.hasMine && !tile.status.includes('flagged')) {
+                        for (let i = 0; i < tile.mineCount; i++) {
+                            flagTile(tile);
+                        }
                     }
                 });
             });
@@ -216,20 +236,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
             board.forEach(row => {
                 row.forEach(tile => {
-                    if (tile.status !== TILE_STATUSES.FLAGGED && tile.hasMine) { // Reveal unflagged mines
-                        tile.status = TILE_STATUSES.MINE;
-                    } else if (tile.status === TILE_STATUSES.FLAGGED && !tile.hasMine) { // Mark incorrect flags
-                        tile.element.innerHTML += '<span class="red-x">❌</span>';
+                    if (!tile.status.includes('flagged') && tile.hasMine) { // Reveal unflagged mines
+                        tile.status = 'mine' + tile.mineCount;
+                    } else if (tile.status.includes('flagged')) { // Mark incorrect flags yellow
+                        if (!tile.hasMine) {
+                            tile.element.innerHTML += '<span class="red-x">❌</span>';
+                        } else if (tile.mineCount !== parseInt(tile.status.charAt(tile.status.length - 1))) {
+                            tile.status = 'mine' + tile.mineCount;
+                            tile.element.style.backgroundColor = '#fd0';
+                        }
                     }
                 });
             });
 
             if (lastRevealedTile) { // Indicate the mine user clicked (or chorded) on, which caused them to lose
-                if (lastRevealedTile.status === TILE_STATUSES.MINE) {
+                if (lastRevealedTile.status.includes('mine')) {
                     lastRevealedTile.element.style.backgroundColor = '#f00';
                 }
             }
-
         }
     }
 
@@ -261,8 +285,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleTileChord(tile) {
-        const flaggedNeighbors = nearbyTiles(tile).filter(t => t.status === TILE_STATUSES.FLAGGED);
-        if (parseInt(tile.element.textContent) === flaggedNeighbors.length) {
+        const neighborFlags = nearbyTiles(tile).reduce((count, neighbor) => {
+            if (neighbor.status.includes('flagged')) {
+                const numFlags = parseInt(neighbor.status.charAt(neighbor.status.length - 1)); // Extract the number of flags
+                return count + numFlags;
+            }
+            return count;
+        }, 0);
+        
+        if (parseInt(tile.element.textContent) === neighborFlags) {
             nearbyTiles(tile).forEach(neighbor => {
                 if (neighbor.status === TILE_STATUSES.HIDDEN) {
                     revealTile(neighbor);
@@ -275,15 +306,15 @@ document.addEventListener('DOMContentLoaded', () => {
     /* Game Initialization */
     const urlParams = new URLSearchParams(window.location.search);
     const selectedDifficulty = urlParams.get('difficulty') || 'beginner'; // Get game difficulty from url; beginner if not specified
-    const { height, width, totalMines } = getDifficultySettings(selectedDifficulty);
+    const { height, width, totalMineTiles } = getDifficultySettings(selectedDifficulty);
 
-    board = createBoard(height, width, totalMines); // Create the game board
+    board = createBoard(height, width, totalMineTiles); // Create the game board
 
     boardElement.style.setProperty('--board-height', height);
     boardElement.style.setProperty('--board-width', width);
     infobarElement.style.setProperty('--board-width', width);
 
-    minesLeftText.textContent = totalMines;
+    minesLeftText.textContent = totalMineCount;
 
     difficultyOptions.forEach(option => {
         option.addEventListener('click', () => {

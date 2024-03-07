@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,26 +9,42 @@
 </head>
 
 <body>
+  <script src="main.js"></script>
+
   <header id="header">
-    <div class="navigation-bar">
-    <div class="container-transparent">
-      <h1 class="logo">Minesweeper Variants</h1>
-      <button class="button">Login</button>
+    <div id="navigation-bar">
+      <div class="container-transparent">
+        <h1 class="logo">Minesweeper Variants</h1>
+        <button id="login-button" class="button">Login</button>
+      </div>
     </div>
-  </div>
   </header>
 
   <div class="container">
-  <div class="column">
-    <ul class="gamemode-list">
-      <li><a href="index.html">Classic</a></li>
-      <li><a href="ms-multimines.html"><b>Multimines</b></a></li>
-      <li><a href="ms-ternary.html">Ternary</a></li>
-    </ul>
-  </div>
-  <div class="column">
-    <script src="multimines.js"></script>
-  </div>
+    <div class="column">
+      <ul class="gamemode-list">
+        <li><a href="index.html">Classic</a></li>
+        <li><a href="ms-multimines.html"><b>Multimines</b></a></li>
+        <li><a href="ms-ternary.html">Ternary</a></li>
+      </ul>
+    </div>
+    <div class="column">
+      <h2>Multimines</h2>
+      <div id="difficulty-selector">
+        <button class="difficulty-option" id="beginner">Beginner</span>
+          <button class="difficulty-option" id="intermediate">Intermediate</span>
+            <button class="difficulty-option" id="expert">Expert</span>
+      </div>
+      <br>
+      <div class="board-info-bar">
+        <span mines-left></span>
+        <button id="status-button">🙂</button>
+        <span id="timer">0.00</span>
+      </div>
+      <div class="board"></div>
+      <script src="multimines.js"></script>
+    </div>
   </div>
 </body>
+
 </html>

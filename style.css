@@ -41,7 +41,7 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
-  padding: 15px 15px 15px 15px;
+  padding: 30px 15px 30px 15px;
   background-color: #fff;
   border: 2px solid #ddd;
   justify-content: space-between;
@@ -62,7 +62,7 @@ h1 {
 h2 {
   font-size: 24px;
   color: #000;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 p {
@@ -214,7 +214,7 @@ button:hover {
 }
 
 .board>[data-status="mine"]:after {
-  content: "💀";
+  content: "💣";
 }
 
 .board>[data-status="revealed"]:after {
@@ -231,4 +231,68 @@ button:hover {
 
 .red-x {
   position: absolute;
+}
+
+
+
+.board>[data-status="mine1"], .board>[data-status="mine2"], .board>[data-status="mine3"], .board>[data-status="mine4"] {
+  background-color: #ccc;
+  text-align: center;
+  line-height: 20px;
+}
+
+.board>[data-status="flagged1"], .board>[data-status="flagged2"], .board>[data-status="flagged3"], .board>[data-status="flagged4"] {
+  background-color: #eee;
+  text-align: center;
+  line-height: 15px;
+}
+
+.board>[data-status="mine1"]:after {
+  content: "💣";
+}
+
+.board>[data-status="mine2"]:after {
+  content: "💣💣";
+  transform: scale(0.6, 0.6);
+  white-space: nowrap;
+  letter-spacing: -7px;
+}
+
+.board>[data-status="mine3"]:after {
+  content: "💣\a💣💣";
+  transform: scale(0.6, 0.6);
+  white-space: pre;
+  letter-spacing: -7px;
+}
+
+.board>[data-status="mine4"]:after {
+  content: "💣💣\a💣💣";
+  transform: scale(0.6, 0.6);
+  white-space: pre;
+  letter-spacing: -7px;
+}
+
+.board>[data-status="flagged1"]:after {
+  content: "🚩";
+}
+
+.board>[data-status="flagged2"]:after {
+  content: "🚩🚩";
+  transform: scale(0.6, 1.0);
+  white-space: nowrap;
+  letter-spacing: -9px;
+}
+
+.board>[data-status="flagged3"]:after {
+  content: "🚩\a🚩🚩";
+  transform: scale(0.6, 0.6);
+  white-space: pre;
+  letter-spacing: -7px;
+}
+
+.board>[data-status="flagged4"]:after {
+  content: "🚩🚩\a🚩🚩";
+  transform: scale(0.6, 0.6);
+  white-space: pre;
+  letter-spacing: -9px;
 }
