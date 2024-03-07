@@ -293,47 +293,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     let isLeftButtonDown = false;
-let isRightButtonDown = false;
+    let isRightButtonDown = false;
 
-board.forEach(row => {
-    row.forEach(tile => {
-        boardElement.append(tile.element);
+    board.forEach(row => {
+        row.forEach(tile => {
+            boardElement.append(tile.element);
 
-        tile.element.addEventListener('mousedown', e => {
-            e.preventDefault();
-            if (e.button === 0) {
-                isLeftButtonDown = true;
-            }
-            if (e.button === 2) {
-                isRightButtonDown = true;
-                handleTileRightClick(tile);
-            }
-        });
+            tile.element.addEventListener('mousedown', e => {
+                e.preventDefault();
+                if (e.button === 0) {
+                    isLeftButtonDown = true;
+                }
+                if (e.button === 2) {
+                    isRightButtonDown = true;
+                    handleTileRightClick(tile);
+                }
+            });
 
-        tile.element.addEventListener('mouseup', e => {
-            e.preventDefault();
-            if (e.button === 0 && isRightButtonDown) {
-                handleTileChord(tile);
-            }
-            if (e.button === 2 && isLeftButtonDown) {
-                handleTileChord(tile);
-            }
-            if (e.button === 0) {
-                isLeftButtonDown = false;
-                handleTileClick(tile);
-            }
-            if (e.button === 2) {
-                isRightButtonDown = false;
-            }
-        });
+            tile.element.addEventListener('mouseup', e => {
+                e.preventDefault();
+                if (e.button === 0 && isRightButtonDown) {
+                    handleTileChord(tile);
+                }
+                if (e.button === 2 && isLeftButtonDown) {
+                    handleTileChord(tile);
+                }
+                if (e.button === 0) {
+                    isLeftButtonDown = false;
+                    handleTileClick(tile);
+                }
+                if (e.button === 2) {
+                    isRightButtonDown = false;
+                }
+            });
 
-        tile.element.addEventListener('contextmenu', e => {
-            e.preventDefault();
+            tile.element.addEventListener('contextmenu', e => {
+                e.preventDefault();
+            });
         });
     });
-});
-
-
-
-
 });
