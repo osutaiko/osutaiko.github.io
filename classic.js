@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Constants and Variables
+    /* Constants and Variables */
     const DIFFICULTIES = [
         { name: 'beginner', height: 8, width: 8, totalMines: 10 },
         { name: 'intermediate', height: 16, width: 16, totalMines: 40 },
@@ -8,25 +8,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const TILE_STATUSES = {
         HIDDEN: 'hidden',
-        MINE: 'mine',
+        MINE: 'mine', // Only appears when game is lost
         REVEALED: 'revealed',
         FLAGGED: 'flagged'
     };
 
     let timerInterval;
     let elapsedTime = 0;
-    let isFirstClick = true;
+    let isFirstClick = true; // Turns into false after first tile is revealed
     let lastRevealedTile = null;
     let board; // Variable to hold the game board
 
-    // DOM Elements
+    /* DOM Elements */
     const timerElement = document.getElementById('timer');
     const infobarElement = document.querySelector('.board-info-bar');
     const boardElement = document.querySelector('.board');
     const minesLeftText = document.querySelector('[mines-left]');
     const statusButton = document.querySelector('#status-button');
 
-    // Event Listeners
+    /* Event Listeners */
     const difficultyOptions = document.querySelectorAll('.difficulty-option');
     statusButton.addEventListener('click', () => {
         location.reload();
@@ -38,12 +38,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Functions
-    function getDifficultySettings(difficulty) {
+    /* Functions */
+    function getDifficultySettings(difficulty) { // Returns { height, width, totalMines } corresponding to difficulty
         return DIFFICULTIES.find(level => level.name === difficulty) || null;
     }
 
-    function randomNumber(size) {
+    function randomNumber(size) { // Returns integer in [0, size)
         return Math.floor(Math.random() * size);
     }
 
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return a.i === b.i && a.j === b.j;
     }
 
-    function getMinePositions(height, width, totalMines) {
+    function getMinePositions(height, width, totalMines) { // Randomly generates mine locations (retries when mine already exists in list) and returns the list
         const positions = [];
 
         while (positions.length < totalMines) {
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (mines.length === 0) {
             adjacentTiles.forEach(revealTile);
-        } else {
+        } else { // Color code the numbers
             const numberColors = ['#4600ff', '#008809', '#ff0000', '#1e007c', '#8e0000', '#008483', '#000000', '#808080'];
             const number = mines.length;
             tile.element.textContent = number;
@@ -145,21 +145,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function flagTile(tile) {
+    function flagTile(tile) { // Flag tile if tile is unflagged and v.v.
         if (tile.status !== TILE_STATUSES.HIDDEN && tile.status !== TILE_STATUSES.FLAGGED) return;
 
         if (tile.status === TILE_STATUSES.FLAGGED) tile.status = TILE_STATUSES.HIDDEN;
         else tile.status = TILE_STATUSES.FLAGGED;
     }
 
-    function listMinesLeft() {
+    function listMinesLeft() { // Updates number of unflagged mines
         const flaggedTilesCount = board.reduce((count, row) => {
             return count + row.filter(tile => tile.status === TILE_STATUSES.FLAGGED).length;
         }, 0);
         minesLeftText.textContent = totalMines - flaggedTilesCount;
     }
 
-    function nearbyTiles({ i, j }) {
+    function nearbyTiles({ i, j }) { // Returns list of adjacent tiles
         const tiles = [];
 
         for (let iOffset = -1; iOffset <= 1; iOffset++)
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return tiles;
     }
 
-    function checkWin() {
+    function checkWin() { // Game won if every safe tile is revealed, and every mine is either flagged or hidden
         return board.every(row => {
             return row.every(tile => {
                 return tile.status === TILE_STATUSES.REVEALED || (tile.hasMine && (tile.status === TILE_STATUSES.HIDDEN || tile.status === TILE_STATUSES.FLAGGED));
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function checkLoss() {
+    function checkLoss() { // Game lost if some tile with a mine is revealed (hidden -> mine)
         return board.some(row => {
             return row.some(tile => {
                 return tile.status === TILE_STATUSES.MINE;
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (is_win) {
             statusButton.textContent = '😎';
-            minesLeftText.textContent = '0';
+            minesLeftText.textContent = '0'; // Automatically flag every mine
             board.forEach(row => {
                 row.forEach(tile => {
                     if (tile.hasMine && tile.status !== TILE_STATUSES.FLAGGED) {
@@ -216,17 +216,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
             board.forEach(row => {
                 row.forEach(tile => {
-                    if (tile.status !== TILE_STATUSES.FLAGGED && tile.hasMine) {
+                    if (tile.status !== TILE_STATUSES.FLAGGED && tile.hasMine) { // Reveal unflagged mines
                         tile.status = TILE_STATUSES.MINE;
-                    } else if (tile.status === TILE_STATUSES.FLAGGED && !tile.hasMine) {
+                    } else if (tile.status === TILE_STATUSES.FLAGGED && !tile.hasMine) { // Mark incorrect flags
                         tile.element.innerHTML += '<span class="red-x">❌</span>';
                     }
                 });
             });
 
-            if (lastRevealedTile) {
-                if (lastRevealedTile.status === TILE_STATUSES.MINE)
+            if (lastRevealedTile) { // Indicate the mine user clicked (or chorded) on, which caused them to lose
+                if (lastRevealedTile.status === TILE_STATUSES.MINE) {
                     lastRevealedTile.element.style.backgroundColor = 'red';
+                }
             }
 
         }
@@ -271,12 +272,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Initialize
+    /* Game Initialization */
     const urlParams = new URLSearchParams(window.location.search);
-    const selectedDifficulty = urlParams.get('difficulty') || 'beginner';
+    const selectedDifficulty = urlParams.get('difficulty') || 'beginner'; // Get game difficulty from url; beginner if not specified
     const { height, width, totalMines } = getDifficultySettings(selectedDifficulty);
 
-    board = createBoard(height, width, totalMines); // Initialize the game board
+    board = createBoard(height, width, totalMines); // Create the game board
 
     boardElement.style.setProperty('--board-height', height);
     boardElement.style.setProperty('--board-width', width);
@@ -300,8 +301,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             tile.element.addEventListener('mousedown', e => {
                 e.preventDefault();
-                if (e.button === 0) isLeftButtonDown = true; // Left button
-                if (e.button === 2) isRightButtonDown = true; // Right button
+                if (e.button === 0) isLeftButtonDown = true; // LMB
+                if (e.button === 2) isRightButtonDown = true; // RMB
 
                 if (isLeftButtonDown && isRightButtonDown) {
                     handleTileChord(tile);
@@ -314,8 +315,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             tile.element.addEventListener('mouseup', e => {
                 e.preventDefault();
-                if (e.button === 0) isLeftButtonDown = false; // Left button
-                if (e.button === 2) isRightButtonDown = false; // Right button
+                if (e.button === 0) isLeftButtonDown = false; // LMB
+                if (e.button === 2) isRightButtonDown = false; // RMB
             });
 
             tile.element.addEventListener('contextmenu', e => {
