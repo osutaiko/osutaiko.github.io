@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     j: randomNumber(board[0].length)
                 };
 
-                while (tile.i === newMinePosition.i && tile.j === newMinePosition.j) {
+                while (board[newMinePosition.i][newMinePosition.j].hasMine) {
                     newMinePosition.i = randomNumber(board.length);
                     newMinePosition.j = randomNumber(board[0].length);
                 }
