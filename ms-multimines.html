@@ -38,6 +38,37 @@
         </ul>
       </div>
     </div>
+    <div id="modal-mytimes" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Classic</h2> 
+        <table>
+          <tr>
+            <th>Beginner</th>
+            <th>Intermediate</th>
+            <th>Expert</th>
+          </tr>
+          <tr>
+            <td id="beginner-time"></td>
+            <td id="intermediate-time"></td>
+            <td id="expert-time"></td>
+          </tr>
+        </table>
+        <h2>Multimines</h2> 
+        <table>
+          <tr>
+            <th>Beginner</th>
+            <th>Intermediate</th>
+            <th>Expert</th>
+          </tr>
+          <tr>
+            <td id="multi-beginner-time">N/A</td>
+            <td id="multi-intermediate-time">N/A</td>
+            <td id="multi-beginner-time">N/A</td>
+          </tr>
+        </table>
+      </div>
+    </div>
   </header>
 
   <div class="container">
@@ -45,15 +76,14 @@
       <ul class="gamemode-list">
         <li><a href="index.html">Classic</a></li>
         <li><a href="ms-multimines.html"><b>Multimines</b></a></li>
-        <li><a href="ms-ternary.html">Ternary</a></li>
       </ul>
     </div>
     <div class="column">
       <h2>Multimines</h2>
       <div id="difficulty-selector">
-        <button class="difficulty-option" id="beginner">Beginner</span>
-        <button class="difficulty-option" id="intermediate">Intermediate</span>
-        <button class="difficulty-option" id="expert">Expert</span>
+        <button class="difficulty-option" id="beginner">Beginner</button>
+        <button class="difficulty-option" id="intermediate">Intermediate</button>
+        <button class="difficulty-option" id="expert">Expert</button>
       </div>
       <br>
       <div class="board-info-bar">

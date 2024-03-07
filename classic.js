@@ -209,6 +209,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
             });
+            
+            var bestTime = localStorage.getItem(selectedDifficulty + '-time');
+            if (bestTime === null || elapsedTime < bestTime) {
+                saveBestTime();
+            }
         }
 
         if (is_loss) {
@@ -270,6 +275,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }
+    }
+
+    function saveBestTime() {
+        localStorage.setItem(selectedDifficulty + '-time', elapsedTime.toFixed(2));
+        document.getElementById(selectedDifficulty + '-time').textContent = elapsedTime.toFixed(2);
     }
 
     /* Game Initialization */

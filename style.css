@@ -71,6 +71,30 @@ p {
   margin-bottom: 30px;
 }
 
+
+table {
+  border-collapse: collapse;
+  margin-bottom: 40px;
+  width: 400px;
+  table-layout: fixed;
+}
+
+th {
+  border: 1px solid #ddd;
+  background-color: #eee;
+  text-align: center;
+  padding: 8px;
+
+}
+
+td {
+  border: 1px solid #ddd;
+  background-color: #fff;
+  text-align: center;
+  padding: 8px;
+}
+
+
 button {
   padding: 10px 20px;
   font-size: 16px;
@@ -101,7 +125,7 @@ button:hover {
   margin: 15% auto;
   padding: 40px 30px 40px 30px;
   border: 2px solid #ddd;
-  width: 80%;
+  width: 60%;
 }
 
 .close {
