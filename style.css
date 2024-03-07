@@ -89,7 +89,7 @@ button:hover {
   position: relative;
 }
 
-.column + .column::before {
+.column+.column::before {
   content: "";
   position: absolute;
   top: 0;
@@ -182,7 +182,7 @@ button:hover {
   border-collapse: collapse;
 }
 
-.board > * {
+.board>* {
   width: 25px;
   height: 25px;
   display: flex;
@@ -197,35 +197,35 @@ button:hover {
   font-weight: 900;
 }
 
-.board > [data-status="hidden"] {
+.board>[data-status="hidden"] {
   background-color: #eee;
 }
 
-.board > [data-status="mine"] {
+.board>[data-status="mine"] {
   background-color: #ccc;
 }
 
-.board > [data-status="revealed"] {
+.board>[data-status="revealed"] {
   background-color: #ccc;
 }
 
-.board > [data-status="flagged"] {
+.board>[data-status="flagged"] {
   background-color: #eee;
 }
 
-.board > [data-status="mine"]:after {
+.board>[data-status="mine"]:after {
   content: "💀";
 }
 
-.board > [data-status="revealed"]:after {
+.board>[data-status="revealed"]:after {
   content: "";
 }
 
-.board > [data-status="flagged"]:after {
+.board>[data-status="flagged"]:after {
   content: "🚩";
 }
 
-.board > [data-status="flagged"][data-has-mine="true"]:after {
+.board>[data-status="flagged"][data-has-mine="true"]:after {
   content: "❌";
 }
 

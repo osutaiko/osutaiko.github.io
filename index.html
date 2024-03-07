@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,36 +13,37 @@
 
   <header id="header">
     <div id="navigation-bar">
-    <div class="container-transparent">
-      <h1 class="logo">Minesweeper Variants</h1>
-      <button id="login-button" class="button">Login</button>
+      <div class="container-transparent">
+        <h1 class="logo">Minesweeper Variants</h1>
+        <button id="login-button" class="button">Login</button>
+      </div>
     </div>
-  </div>
   </header>
 
   <div class="container">
-  <div class="column">
-    <ul class="gamemode-list">
-      <li><a href="index.html"><b>Classic</b></a></li>
-      <li><a href="ms-multimines.html">Multimines</a></li>
-      <li><a href="ms-ternary.html">Ternary</a></li>
-    </ul>
-  </div>
-  <div class="column">
-    <div id="difficulty-selector">
-      <button class="difficulty-option" id="beginner">Beginner</span>
-      <button class="difficulty-option" id="intermediate">Intermediate</span>
-      <button class="difficulty-option" id="expert">Expert</span>
+    <div class="column">
+      <ul class="gamemode-list">
+        <li><a href="index.html"><b>Classic</b></a></li>
+        <li><a href="ms-multimines.html">Multimines</a></li>
+        <li><a href="ms-ternary.html">Ternary</a></li>
+      </ul>
     </div>
-    <br>
-    <div class="board-info-bar">
-      <span mines-left></span>
-      <button id="status-button">🙂</button>
-      <span id="timer">0.00</span>
+    <div class="column">
+      <div id="difficulty-selector">
+        <button class="difficulty-option" id="beginner">Beginner</span>
+          <button class="difficulty-option" id="intermediate">Intermediate</span>
+            <button class="difficulty-option" id="expert">Expert</span>
+      </div>
+      <br>
+      <div class="board-info-bar">
+        <span mines-left></span>
+        <button id="status-button">🙂</button>
+        <span id="timer">0.00</span>
+      </div>
+      <div class="board"></div>
+      <script src="classic.js"></script>
     </div>
-    <div class="board"></div>
-    <script src="classic.js"></script>
-  </div>
   </div>
 </body>
+
 </html>

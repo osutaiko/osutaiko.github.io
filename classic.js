@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Constants and Variables
     const DIFFICULTIES = [
         { name: 'beginner', height: 8, width: 8, totalMines: 10 },
         { name: 'intermediate', height: 16, width: 16, totalMines: 40 },
@@ -14,60 +15,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let timerInterval;
     let elapsedTime = 0;
-    const timerElement = document.getElementById('timer');
-
-    function startTimer() {
-        timerInterval = setInterval(() => {
-            elapsedTime += 0.01;
-            timerElement.textContent = elapsedTime.toFixed(2);
-        }, 10);
-    }
-
-    function stopTimer() {
-        clearInterval(timerInterval);
-    }
-
     let isFirstClick = true;
     let lastRevealedTile = null;
+    let board; // Variable to hold the game board
 
+    // DOM Elements
+    const timerElement = document.getElementById('timer');
+    const infobarElement = document.querySelector('.board-info-bar');
+    const boardElement = document.querySelector('.board');
+    const minesLeftText = document.querySelector('[mines-left]');
+    const statusButton = document.querySelector('#status-button');
+
+    // Event Listeners
+    const difficultyOptions = document.querySelectorAll('.difficulty-option');
+    statusButton.addEventListener('click', () => {
+        location.reload();
+    });
+    document.addEventListener('keydown', e => {
+        if (e.key === ' ' || e.key === 'Spacebar') {
+            e.preventDefault();
+            location.reload();
+        }
+    });
+
+    // Functions
     function getDifficultySettings(difficulty) {
-        const settings = DIFFICULTIES.find(level => level.name === difficulty);
-        return settings ? settings : null;
+        return DIFFICULTIES.find(level => level.name === difficulty) || null;
     }
 
     function randomNumber(size) {
         return Math.floor(Math.random() * size);
-    }
-
-    function createBoard(height, width, totalMines) {
-        const board = [];
-        const minePositions = getMinePositions(height, width, totalMines);
-
-        for (let i = 0; i < height; i++) {
-            const row = [];
-            for (let j = 0; j < width; j++) {
-                const element = document.createElement('div');
-                element.dataset.status = TILE_STATUSES.HIDDEN;
-
-                const tile = {
-                    element,
-                    i,
-                    j,
-                    hasMine: minePositions.some(positionMatch.bind(null, { i, j })),
-
-                    get status() {
-                        return this.element.dataset.status;
-                    },
-                    set status(value) {
-                        this.element.dataset.status = value;
-                    }
-                };
-
-                row.push(tile);
-            }
-            board.push(row);
-        }
-        return board;
     }
 
     function positionMatch(a, b) {
@@ -91,7 +68,38 @@ document.addEventListener('DOMContentLoaded', () => {
         return positions;
     }
 
-    function revealTile(board, tile) {
+    function createBoard(height, width, totalMines) {
+        const minePositions = getMinePositions(height, width, totalMines);
+        const newBoard = [];
+
+        for (let i = 0; i < height; i++) {
+            const row = [];
+            for (let j = 0; j < width; j++) {
+                const element = document.createElement('div');
+                element.dataset.status = TILE_STATUSES.HIDDEN;
+
+                const tile = {
+                    element,
+                    i,
+                    j,
+                    hasMine: minePositions.some(positionMatch.bind(null, { i, j })),
+
+                    get status() {
+                        return this.element.dataset.status;
+                    },
+                    set status(value) {
+                        this.element.dataset.status = value;
+                    }
+                };
+
+                row.push(tile);
+            }
+            newBoard.push(row);
+        }
+        return newBoard;
+    }
+
+    function revealTile(tile) {
         if (isFirstClick) {
             startTimer();
 
@@ -123,11 +131,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         tile.status = TILE_STATUSES.REVEALED;
-        const adjacentTiles = nearbyTiles(board, tile);
+        const adjacentTiles = nearbyTiles(tile);
         const mines = adjacentTiles.filter(t => t.hasMine);
 
         if (mines.length === 0) {
-            adjacentTiles.forEach(revealTile.bind(null, board));
+            adjacentTiles.forEach(revealTile);
         } else {
             const numberColors = ['#4600ff', '#008809', '#ff0000', '#1e007c', '#8e0000', '#008483', '#000000', '#808080'];
             const number = mines.length;
@@ -144,14 +152,14 @@ document.addEventListener('DOMContentLoaded', () => {
         else tile.status = TILE_STATUSES.FLAGGED;
     }
 
-    function listMinesLeft(board, totalMines) {
+    function listMinesLeft() {
         const flaggedTilesCount = board.reduce((count, row) => {
             return count + row.filter(tile => tile.status === TILE_STATUSES.FLAGGED).length;
         }, 0);
         minesLeftText.textContent = totalMines - flaggedTilesCount;
     }
 
-    function nearbyTiles(board, { i, j }) {
+    function nearbyTiles({ i, j }) {
         const tiles = [];
 
         for (let iOffset = -1; iOffset <= 1; iOffset++)
@@ -220,65 +228,65 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (lastRevealedTile.status === TILE_STATUSES.MINE)
                     lastRevealedTile.element.style.backgroundColor = 'red';
             }
-                
+
         }
     }
 
-    
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            elapsedTime += 0.01;
+            timerElement.textContent = elapsedTime.toFixed(2);
+        }, 10);
+    }
+
+    function stopTimer() {
+        clearInterval(timerInterval);
+    }
 
     function stopProp(e) {
         e.stopImmediatePropagation();
     }
 
-    function handleTileClick(board, tile) {
+    function handleTileClick(tile) {
         if (tile.status === TILE_STATUSES.HIDDEN) {
-            revealTile(board, tile);
+            revealTile(tile);
             checkGameEnd();
         }
     }
 
     function handleTileRightClick(tile) {
         flagTile(tile);
-        listMinesLeft(board, totalMines);
+        listMinesLeft();
     }
 
-    function handleTileChord(board, tile) {
-        const flaggedNeighbors = nearbyTiles(board, tile).filter(t => t.status === TILE_STATUSES.FLAGGED);
+    function handleTileChord(tile) {
+        const flaggedNeighbors = nearbyTiles(tile).filter(t => t.status === TILE_STATUSES.FLAGGED);
         if (parseInt(tile.element.textContent) === flaggedNeighbors.length) {
-            nearbyTiles(board, tile).forEach(neighbor => {
+            nearbyTiles(tile).forEach(neighbor => {
                 if (neighbor.status === TILE_STATUSES.HIDDEN) {
-                    revealTile(board, neighbor);
+                    revealTile(neighbor);
                     checkGameEnd();
                 }
             });
         }
     }
 
+    // Initialize
     const urlParams = new URLSearchParams(window.location.search);
     const selectedDifficulty = urlParams.get('difficulty') || 'beginner';
     const { height, width, totalMines } = getDifficultySettings(selectedDifficulty);
 
-    const board = createBoard(height, width, totalMines);
-    const infobarElement = document.querySelector('.board-info-bar');
-    const boardElement = document.querySelector('.board');
-    const minesLeftText = document.querySelector('[mines-left]');
-    const statusButton = document.querySelector('#status-button');
+    board = createBoard(height, width, totalMines); // Initialize the game board
 
-    // Set board height and width
     boardElement.style.setProperty('--board-height', height);
     boardElement.style.setProperty('--board-width', width);
     infobarElement.style.setProperty('--board-width', width);
 
-    // Display total mines left
     minesLeftText.textContent = totalMines;
 
-    // Attach click event listeners to difficulty options
-    const difficultyOptions = document.querySelectorAll('.difficulty-option');
     difficultyOptions.forEach(option => {
         option.addEventListener('click', () => {
             const selectedDifficulty = option.id;
-            const { height, width, totalMines } = getDifficultySettings(selectedDifficulty);
-            // Reload the page with the new difficulty
             window.location.href = `${window.location.origin}${window.location.pathname}?difficulty=${selectedDifficulty}`;
         });
     });
@@ -296,9 +304,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (e.button === 2) isRightButtonDown = true; // Right button
 
                 if (isLeftButtonDown && isRightButtonDown) {
-                    handleTileChord(board, tile);
+                    handleTileChord(tile);
                 } else if (isLeftButtonDown) {
-                    handleTileClick(board, tile);
+                    handleTileClick(tile);
                 } else if (isRightButtonDown) {
                     handleTileRightClick(tile);
                 }
@@ -315,15 +323,4 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
-
-    statusButton.addEventListener('click', () =>{
-        location.reload();
-    })
-
-    document.addEventListener('keydown', e => {
-        if (e.key === ' ' || e.key === 'Spacebar'){
-            e.preventDefault();
-            location.reload();
-        }
-    })
 });
