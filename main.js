@@ -33,19 +33,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    var beginnerTime = localStorage.getItem("beginner-time");
-    var intermediateTime = localStorage.getItem("intermediate-time");
-    var expertTime = localStorage.getItem("expert-time");
-
-    document.getElementById("beginner-time").textContent = beginnerTime || "N/A";
-    document.getElementById("intermediate-time").textContent = intermediateTime || "N/A";
-    document.getElementById("expert-time").textContent = expertTime || "N/A";
-
-    var multiBeginnerTime = localStorage.getItem("multi-beginner-time");
-    var multiIntermediateTime = localStorage.getItem("multi-intermediate-time");
-    var multiExpertTime = localStorage.getItem("multi-expert-time");
-
-    document.getElementById("multi-beginner-time").textContent = multiBeginnerTime || "N/A";
-    document.getElementById("multi-intermediate-time").textContent = multiIntermediateTime || "N/A";
-    document.getElementById("multi-expert-time").textContent = multiExpertTime || "N/A";
+    
+    
+    var storageKeys = [
+        'beginner-time',
+        'intermediate-time',
+        'expert-time',
+        'multi-beginner-time',
+        'multi-intermediate-time',
+        'multi-expert-time'
+    ];
+    
+    for (var i = 0; i < storageKeys.length; i++) {
+        document.getElementById(storageKeys[i]).textContent = localStorage.getItem(storageKeys[i]) || 'N/A';
+    }
 });
