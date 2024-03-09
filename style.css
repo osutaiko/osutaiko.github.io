@@ -227,8 +227,6 @@ button:hover {
   padding: 10px;
   font-size: 35px;
   cursor: pointer;
-  max-width: 75px;
-  max-height: 75px;
 }
 
 .toggle-click:hover {
@@ -417,6 +415,7 @@ button:hover {
   background-color: #777;
   border: 5px solid #777;
   border-collapse: collapse;
+  margin-bottom: 50px;
 }
 
 .board>* {

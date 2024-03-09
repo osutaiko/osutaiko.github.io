@@ -307,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isLeftButtonDown = false;
     let isRightButtonDown = false;
 
-    var isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints || navigator.msMaxTouchPoints;
+    var isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
     var isRightClickToggled = false;
     if (isTouchDevice) {
         var toggleClickButton = document.createElement('button');
