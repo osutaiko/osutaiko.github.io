@@ -301,8 +301,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+
+    var isTouchDevice = 'ontouchstart' in window || navigator.msMaxTouchPoints;
+    var isRightClickToggled = false;
     let isLeftButtonDown = false;
     let isRightButtonDown = false;
+
+    if (isTouchDevice) {
+        var toggleClickButton = document.createElement('button');
+        toggleClickButton.id = 'toggle-click';
+        toggleClickButton.className = 'toggle-click';
+        toggleClickButton.innerHTML = '⛏️';
+        document.body.appendChild(toggleClickButton);
+        toggleClickButton.addEventListener('click', () => {
+            isRightClickToggled = !isRightClickToggled;
+            toggleClickButton.textContent = isRightClickToggled ? '🚩' : '⛏️';
+        });
+    }
 
     board.forEach(row => {
         row.forEach(tile => {
@@ -310,10 +325,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             tile.element.addEventListener('mousedown', e => {
                 e.preventDefault();
-                if (e.button === 0) { // LMB
+                const thisButton = isRightClickToggled ? (2 - e.button) : e.button;
+                if (thisButton === 0) { // LMB
                     isLeftButtonDown = true;
                 }
-                if (e.button === 2) { // RMB
+                if (thisButton === 2) { // RMB
                     isRightButtonDown = true;
                     handleTileRightClick(tile);
                 }
@@ -321,21 +337,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
             tile.element.addEventListener('mouseup', e => {
                 e.preventDefault();
-
-                if (e.button === 0) {
+                const thisButton = isRightClickToggled ? (2 - e.button) : e.button;
+                if (thisButton === 0) {
                     isLeftButtonDown = false;
                     if (isRightButtonDown) {
                         handleTileChord(tile);
                     } else {
                         handleTileClick(tile);
                     }
-                } else if (e.button === 1) {
+                } else if (thisButton === 1) {
                     handleTileChord(tile);
-                } else if (e.button === 2) {
+                } else if (thisButton === 2) {
                     isRightButtonDown = false;
                     if (isLeftButtonDown) {
                         handleTileChord(tile);
                     }
+                }
+
+                if (isTouchDevice && tile.status === TILE_STATUSES.REVEALED) {
+                    handleTileChord(tile);
                 }
             });
 
