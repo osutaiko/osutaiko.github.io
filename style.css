@@ -122,7 +122,7 @@ button:hover {
 
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto;
+  margin: 5% auto;
   padding: 40px 30px 40px 30px;
   border: 2px solid #ddd;
   width: 60%;
@@ -364,4 +364,21 @@ button:hover {
   transform: scale(0.6, 0.6);
   white-space: pre;
   letter-spacing: -9px;
+}
+
+
+.board>[data-status="neg-mine"] {
+  background-color: #ccc;
+}
+
+.board>[data-status="neg-mine"]:after {
+  content: "🕊️";
+}
+
+.board>[data-status="neg-flagged"] {
+  background-color: #eee;
+}
+
+.board>[data-status="neg-flagged"]:after {
+  content: "🏳️";
 }

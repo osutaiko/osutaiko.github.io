@@ -1,16 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
     /* Constants and Variables */
     const DIFFICULTIES = [
-        { name: 'beginner', height: 9, width: 9, totalMines: 10 },
-        { name: 'intermediate', height: 16, width: 16, totalMines: 40 },
-        { name: 'expert', height: 16, width: 30, totalMines: 99 }
+        { name: 'beginner', height: 9, width: 9, totalMines: 6, totalNegMines: 3 },
+        { name: 'intermediate', height: 16, width: 16, totalMines: 24, totalNegMines: 12 },
+        { name: 'expert', height: 16, width: 30, totalMines: 60, totalNegMines: 30 }
     ];
 
     const TILE_STATUSES = {
         HIDDEN: 'hidden',
         MINE: 'mine', // Only appears when game is lost
+        NEG_MINE: 'neg-mine',
         REVEALED: 'revealed',
-        FLAGGED: 'flagged'
+        FLAGGED: 'flagged',
+        NEG_FLAGGED: 'neg-flagged'
     };
 
     let timerInterval;
@@ -24,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const infobarElement = document.querySelector('.board-info-bar');
     const boardElement = document.querySelector('.board');
     const minesLeftText = document.querySelector('[mines-left]');
+    const negMinesLeftText = document.querySelector('[neg-mines-left]');
     const statusButton = document.querySelector('#status-button');
 
     /* Event Listeners */
@@ -39,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* Functions */
-    function getDifficultySettings(difficulty) { // Returns { height, width, totalMines } corresponding to difficulty
+    function getDifficultySettings(difficulty) { // Returns { height, width, totalMines, totalNegMines } corresponding to difficulty
         return DIFFICULTIES.find(level => level.name === difficulty) || null;
     }
 
@@ -51,10 +54,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return a.i === b.i && a.j === b.j;
     }
 
-    function getMinePositions(height, width, totalMines) { // Randomly generates mine locations (retries when mine already exists in list) and returns the list
+    function getMinePositions(height, width, totalMines, totalNegMines) { // Randomly generates mine locations (retries when mine already exists in list) and returns the list
         const positions = [];
 
-        while (positions.length < totalMines) {
+        while (positions.length < totalMines + totalNegMines) {
             const position = {
                 i: randomNumber(height),
                 j: randomNumber(width)
@@ -68,8 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return positions;
     }
 
-    function createBoard(height, width, totalMines) {
-        const minePositions = getMinePositions(height, width, totalMines);
+    function createBoard(height, width, totalMines, totalNegMines) {
+        const minePositions = getMinePositions(height, width, totalMines, totalNegMines);
         const newBoard = [];
 
         for (let i = 0; i < height; i++) {
@@ -77,13 +80,24 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let j = 0; j < width; j++) {
                 const element = document.createElement('div');
                 element.dataset.status = TILE_STATUSES.HIDDEN;
-
+    
+                // Determine mineType based on position in minePositions list
+                let mineType = 0;
+                const index = minePositions.findIndex(position => position.i === i && position.j === j);
+                if (index !== -1) {
+                    if (index < totalMines) {
+                        mineType = 1; // Positive mine
+                    } else if (index < totalMines + totalNegMines) {
+                        mineType = -1; // Negative mine
+                    }
+                }
+    
                 const tile = {
                     element,
                     i,
                     j,
-                    hasMine: minePositions.some(positionMatch.bind(null, { i, j })),
-
+                    hasMine: mineType !== 0,
+                    mineType,
                     get status() {
                         return this.element.dataset.status;
                     },
@@ -91,11 +105,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         this.element.dataset.status = value;
                     }
                 };
-
+    
                 row.push(tile);
             }
             newBoard.push(row);
         }
+
         return newBoard;
     }
 
@@ -117,6 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const newTile = board[newMinePosition.i][newMinePosition.j];
                 tile.hasMine = false;
                 newTile.hasMine = true;
+                newTile.mineType = tile.mineType;
+                tile.mineType = 0;
             }
             isFirstClick = false;
         }
@@ -125,37 +142,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (tile.status != TILE_STATUSES.HIDDEN) return;
 
-        if (tile.hasMine) {
+        if (tile.mineType === 1) {
             tile.status = TILE_STATUSES.MINE;
+            return;
+        } else if (tile.mineType === -1) {
+            tile.status = TILE_STATUSES.NEG_MINE;
             return;
         }
 
         tile.status = TILE_STATUSES.REVEALED;
         const adjacentTiles = nearbyTiles(tile);
-        const mines = adjacentTiles.filter(t => t.hasMine);
+        const mines = adjacentTiles.filter(t => t.mineType === 1);
+        const neg_mines = adjacentTiles.filter(t => t.mineType === -1);
 
-        if (mines.length === 0) {
-            adjacentTiles.forEach(revealTile);
-        } else { // Color code the numbers
-            const numberColors = ['#4600ff', '#008809', '#ff0000', '#1e007c', '#8e0000', '#008483', '#000000', '#808080'];
-            const number = mines.length;
+        if (mines.length - neg_mines.length === 0) {
+            adjacentTiles.forEach(tile => {
+                if (!tile.hasMine) {
+                    revealTile(tile);
+                }
+            });
+        } 
+        
+        // Color code the numbers
+        if (!(mines.length === 0 && neg_mines.length === 0)) {
+            const numberColors = ['#ffffff', '#4600ff', '#008809', '#ff0000', '#1e007c', '#8e0000', '#008483', '#000000', '#808080'];
+            const negNumberColors = ['#b9ff00', '#ff77f6', '#00ffff', '#e1ff83', '#71ffff', '#ff7b7c', '#ffffff', '#7f7f7f'];
+            const number = mines.length - neg_mines.length;
             tile.element.textContent = number;
-            tile.element.style.color = numberColors[number - 1];
+            if (number >= 0) {
+                tile.element.style.color = numberColors[number];
+            } else {
+                tile.element.style.color = negNumberColors[-number - 1];
+            }
         }
     }
 
-    function flagTile(tile) { // Flag tile if tile is unflagged and v.v.
-        if (tile.status !== TILE_STATUSES.HIDDEN && tile.status !== TILE_STATUSES.FLAGGED) return;
-
-        if (tile.status === TILE_STATUSES.FLAGGED) tile.status = TILE_STATUSES.HIDDEN;
-        else tile.status = TILE_STATUSES.FLAGGED;
+    function flagTile(tile) {
+        const statusOrder = [TILE_STATUSES.HIDDEN, TILE_STATUSES.FLAGGED, TILE_STATUSES.NEG_FLAGGED];
+    
+        const currentIndex = statusOrder.indexOf(tile.status);
+        if (currentIndex === -1) return;
+    
+        const nextIndex = (currentIndex + 1) % statusOrder.length;
+        tile.status = statusOrder[nextIndex];
     }
 
     function listMinesLeft() { // Updates number of unflagged mines
         const flaggedTilesCount = board.reduce((count, row) => {
             return count + row.filter(tile => tile.status === TILE_STATUSES.FLAGGED).length;
         }, 0);
+        const negFlaggedTilesCount = board.reduce((count, row) => {
+            return count + row.filter(tile => tile.status === TILE_STATUSES.NEG_FLAGGED).length;
+        }, 0);
         minesLeftText.textContent = totalMines - flaggedTilesCount;
+        negMinesLeftText.textContent = totalNegMines - negFlaggedTilesCount;
     }
 
     function nearbyTiles({ i, j }) { // Returns list of adjacent tiles
@@ -174,15 +214,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function checkWin() { // Game won if every safe tile is revealed, and every mine is either flagged or hidden
         return board.every(row => {
             return row.every(tile => {
-                return tile.status === TILE_STATUSES.REVEALED || (tile.hasMine && (tile.status === TILE_STATUSES.HIDDEN || tile.status === TILE_STATUSES.FLAGGED));
+                return tile.status === TILE_STATUSES.REVEALED || (tile.hasMine && (tile.status === TILE_STATUSES.HIDDEN 
+                    || tile.status === TILE_STATUSES.FLAGGED || tile.status === TILE_STATUSES.NEG_FLAGGED));
             });
         });
     }
 
-    function checkLoss() { // Game lost if some tile with a mine is revealed (hidden -> mine)
+    function checkLoss() { // Game lost if some tile with a mine is revealed (hidden -> mine or neg-mine)
         return board.some(row => {
             return row.some(tile => {
-                return tile.status === TILE_STATUSES.MINE;
+                return tile.status === TILE_STATUSES.MINE || tile.status === TILE_STATUSES.NEG_MINE;
             });
         });
     }
@@ -201,15 +242,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (is_win) {
             statusButton.textContent = '😎';
             minesLeftText.textContent = '0'; // Automatically flag every mine
+            negMinesLeftText.textContent = '0';
             board.forEach(row => {
                 row.forEach(tile => {
-                    if (tile.hasMine && tile.status !== TILE_STATUSES.FLAGGED) {
-                        flagTile(tile);
+                    if (tile.status !== TILE_STATUSES.FLAGGED) {
+                        if (tile.mineType === 1) {
+                            tile.status = TILE_STATUSES.FLAGGED;
+                        } else if (tile.mineType === -1) {
+                            tile.status = TILE_STATUSES.NEG_FLAGGED;
+                        }
                     }
                 });
             });
             
-            var bestTime = localStorage.getItem(selectedDifficulty + '-time');
+            var bestTime = localStorage.getItem('omega-' + selectedDifficulty + '-time');
             if (bestTime === null || elapsedTime < bestTime) {
                 saveBestTime();
             }
@@ -220,16 +266,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
             board.forEach(row => {
                 row.forEach(tile => {
-                    if (tile.status !== TILE_STATUSES.FLAGGED && tile.hasMine) { // Reveal unflagged mines
-                        tile.status = TILE_STATUSES.MINE;
-                    } else if (tile.status === TILE_STATUSES.FLAGGED && !tile.hasMine) { // Mark incorrect flags
-                        tile.element.innerHTML += '<span class="red-x">❌</span>';
+                    if (!tile.hasMine) {
+                        if (tile.status === TILE_STATUSES.FLAGGED || tile.status === TILE_STATUSES.NEG_FLAGGED) {
+                            tile.element.innerHTML += '<span class="red-x">❌</span>';
+                        }
+                    } else if (tile.mineType === 1) {
+                        if (tile.status === TILE_STATUSES.HIDDEN) {
+                            tile.status = TILE_STATUSES.MINE;
+                        } else if (tile.status === TILE_STATUSES.NEG_FLAGGED) {
+                            tile.status = TILE_STATUSES.MINE;
+                            tile.element.style.backgroundColor = '#fd0';
+                        }
+                    } else if (tile.mineType === -1) {
+                        if (tile.status === TILE_STATUSES.HIDDEN) {
+                            tile.status = TILE_STATUSES.NEG_MINE;
+                        } else if (tile.status === TILE_STATUSES.FLAGGED) {
+                            tile.status = TILE_STATUSES.NEG_MINE;
+                            tile.element.style.backgroundColor = '#fd0';
+                        }
                     }
                 });
             });
 
             if (lastRevealedTile) { // Indicate the mine user clicked (or chorded) on, which caused them to lose
-                if (lastRevealedTile.status === TILE_STATUSES.MINE) {
+                if (lastRevealedTile.hasMine) {
                     lastRevealedTile.element.style.backgroundColor = '#f00';
                 }
             }
@@ -265,34 +325,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleTileChord(tile) {
-        const flaggedNeighbors = nearbyTiles(tile).filter(t => t.status === TILE_STATUSES.FLAGGED);
-        if (parseInt(tile.element.textContent) === flaggedNeighbors.length) {
-            nearbyTiles(tile).forEach(neighbor => {
-                if (neighbor.status === TILE_STATUSES.HIDDEN) {
-                    revealTile(neighbor);
-                    checkGameEnd();
-                }
-            });
+        const hiddenNeighbors = nearbyTiles(tile).filter(t => t.status === TILE_STATUSES.HIDDEN);
+        if (hiddenNeighbors.length !== 1) {
+            return;
+        }
+
+        var flagSum = nearbyTiles(tile).filter(t => t.status == TILE_STATUSES.FLAGGED).length
+            - nearbyTiles(tile).filter(t => t.status == TILE_STATUSES.NEG_FLAGGED).length;
+
+        if (parseInt(tile.element.textContent) === flagSum) {
+            revealTile(hiddenNeighbors[0]);
+            checkGameEnd();
         }
     }
 
     function saveBestTime() {
-        localStorage.setItem(selectedDifficulty + '-time', elapsedTime.toFixed(2));
-        document.getElementById(selectedDifficulty + '-time').textContent = elapsedTime.toFixed(2);
+        localStorage.setItem('omega-' + selectedDifficulty + '-time', elapsedTime.toFixed(2));
+        document.getElementById('omega-' + selectedDifficulty + '-time').textContent = elapsedTime.toFixed(2);
     }
 
     /* Game Initialization */
     const urlParams = new URLSearchParams(window.location.search);
     const selectedDifficulty = urlParams.get('difficulty') || 'beginner'; // Get game difficulty from url; beginner if not specified
-    const { height, width, totalMines } = getDifficultySettings(selectedDifficulty);
+    const { height, width, totalMines, totalNegMines } = getDifficultySettings(selectedDifficulty);
 
-    board = createBoard(height, width, totalMines); // Create the game board
+    board = createBoard(height, width, totalMines, totalNegMines); // Create the game board
 
     boardElement.style.setProperty('--board-height', height);
     boardElement.style.setProperty('--board-width', width);
     infobarElement.style.setProperty('--board-width', width);
 
     minesLeftText.textContent = totalMines;
+    negMinesLeftText.textContent = totalNegMines;
 
     difficultyOptions.forEach(option => {
         option.addEventListener('click', () => {
