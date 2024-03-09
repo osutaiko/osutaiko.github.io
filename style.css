@@ -214,7 +214,7 @@ button:hover {
 }
 
 .toggle-click {
-  position: absolute;
+  position: fixed;
   bottom: 0px;
   right: 0px;
   z-index: 9999; /* Ensure button stays on top */
@@ -223,6 +223,8 @@ button:hover {
   padding: 10px;
   font-size: 35px;
   cursor: pointer;
+  max-width: 50px;
+  max-height: 50px;
 }
 
 .toggle-click:hover {
