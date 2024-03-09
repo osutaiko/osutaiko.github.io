@@ -185,7 +185,7 @@ button:hover {
   font-size: 18px;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1200px) {
   .container-transparent {
     width: 90%;
   }
@@ -199,19 +199,32 @@ button:hover {
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
   .container-transparent {
-    width: 100%;
+    width: 100%; 
+  }
+  
+  .gamemode-list {
+    display: flex;
+  }
+
+  .gamemode-list li {
+    margin-right: 50px;
   }
 
   .container {
     width: 100%;
     border-left: none;
     border-right: none;
+    flex-direction: column;
   }
 
   .column {
     padding-left: 10px;
+  }
+
+  .column+.column::before {
+    display: none;
   }
 }
 
