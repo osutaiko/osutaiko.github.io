@@ -301,12 +301,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-
-    var isTouchDevice = 'ontouchstart' in window || navigator.msMaxTouchPoints;
-    var isRightClickToggled = false;
     let isLeftButtonDown = false;
     let isRightButtonDown = false;
 
+    var isTouchDevice = 'ontouchstart' in window || navigator.msMaxTouchPoints;
+    var isRightClickToggled = false;
     if (isTouchDevice) {
         var toggleClickButton = document.createElement('button');
         toggleClickButton.id = 'toggle-click';
