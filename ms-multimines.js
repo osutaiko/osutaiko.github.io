@@ -353,18 +353,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
             tile.element.addEventListener('mouseup', e => {
                 e.preventDefault();
-                if (e.button === 0 && isRightButtonDown) {
-                    handleTileChord(tile);
-                }
-                if (e.button === 2 && isLeftButtonDown) {
-                    handleTileChord(tile);
-                }
+
                 if (e.button === 0) {
                     isLeftButtonDown = false;
-                    handleTileClick(tile);
-                }
-                if (e.button === 2) {
+                    if (isRightButtonDown) {
+                        handleTileChord(tile);
+                    } else {
+                        handleTileClick(tile);
+                    }
+                } else if (e.button === 1) {
+                    handleTileChord(tile);
+                } else if (e.button === 2) {
                     isRightButtonDown = false;
+                    if (isLeftButtonDown) {
+                        handleTileChord(tile);
+                    }
                 }
             });
 
