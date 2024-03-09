@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     /* Constants and Variables */
     const DIFFICULTIES = [
-        { name: 'beginner', height: 8, width: 8, totalMineTiles: 10 },
+        { name: 'beginner', height: 9, width: 9, totalMineTiles: 10 },
         { name: 'intermediate', height: 16, width: 16, totalMineTiles: 40 },
         { name: 'expert', height: 16, width: 30, totalMineTiles: 99 }
     ];
