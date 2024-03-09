@@ -336,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isLeftButtonDown = false;
     let isRightButtonDown = false;
     
-    var isTouchDevice = 'ontouchstart' in window || navigator.msMaxTouchPoints;
+    var isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints || navigator.msMaxTouchPoints;
     var isRightClickToggled = false;
     if (isTouchDevice) {
         var toggleClickButton = document.createElement('button');
@@ -386,7 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
 
-                if (isTouchDevice && tile.status === TILE_STATUSES.REVEALED) {
+                if (isTouchDevice && !isRightClickToggled && tile.status === TILE_STATUSES.REVEALED) {
                     handleTileChord(tile);
                 }
             });

@@ -214,7 +214,7 @@ button:hover {
 }
 
 .toggle-click {
-  position: fixed;
+  position: absolute;
   bottom: 0px;
   right: 0px;
   z-index: 9999; /* Ensure button stays on top */
