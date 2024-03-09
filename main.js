@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const loginButton = document.getElementById('login-button');
+    const githubButton = document.getElementById('github-button');
     const myTimesButton = document.getElementById('mytimes-button');
     const helpButton = document.getElementById('help-button');
     const closeModalButton = [...document.getElementsByClassName('close')];
@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const myTimesModal = document.getElementById('modal-mytimes');
     const helpModal = document.getElementById('modal-help');
 
-    loginButton.addEventListener('click', () => {
-        alert("why");
+    githubButton.addEventListener('click', () => {
+        window.location.href = "https://github.com/osutaiko/osutaiko.github.io";
     });
 
     myTimesButton.addEventListener('click', () => {
