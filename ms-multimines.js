@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
 
-            var bestTime = localStorage.getItem('multi-' + selectedDifficulty + '-time');
+            var bestTime = localStorage.getItem('multimines-' + selectedDifficulty + '-time');
             if (bestTime === null || elapsedTime < bestTime) {
                 saveBestTime();
             }
@@ -309,8 +309,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function saveBestTime() {
-        localStorage.setItem('multi-' + selectedDifficulty + '-time', elapsedTime.toFixed(2));
-        document.getElementById('multi-' + selectedDifficulty + '-time').textContent = elapsedTime.toFixed(2);
+        localStorage.setItem('multimines-' + selectedDifficulty + '-time', elapsedTime.toFixed(2));
+        document.getElementById('multimines-' + selectedDifficulty + '-time').textContent = elapsedTime.toFixed(2);
     }
 
     /* Game Initialization */

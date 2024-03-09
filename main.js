@@ -39,9 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'classic-beginner-time',
         'classic-intermediate-time',
         'classic-expert-time',
-        'multi-beginner-time',
-        'multi-intermediate-time',
-        'multi-expert-time',
+        'multimines-beginner-time',
+        'multimines-intermediate-time',
+        'multimines-expert-time',
         'omega-beginner-time',
         'omega-intermediate-time',
         'omega-expert-time'
