@@ -287,6 +287,7 @@ button:hover {
     border-right: none;
     flex-direction: column;
     align-items: stretch;
+    margin-bottom: 30px;
   }
 
   .column {
