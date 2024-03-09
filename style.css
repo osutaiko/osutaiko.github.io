@@ -219,7 +219,7 @@ button:hover {
 
 .toggle-click {
   position: fixed;
-  bottom: 0px;
+  bottom: inherit;
   right: 0px;
   z-index: 9999; /* Ensure button stays on top */
   background-color: #333;
@@ -415,7 +415,6 @@ button:hover {
   background-color: #777;
   border: 5px solid #777;
   border-collapse: collapse;
-  margin-bottom: 50px;
 }
 
 .board>* {

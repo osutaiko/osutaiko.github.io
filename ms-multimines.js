@@ -338,7 +338,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     var isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
     var isRightClickToggled = false;
-    if (isTouchDevice) {
+    //if (isTouchDevice)
+    {
         var toggleClickButton = document.createElement('button');
         toggleClickButton.id = 'toggle-click';
         toggleClickButton.className = 'toggle-click';
