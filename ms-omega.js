@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     /* Constants and Variables */
     const DIFFICULTIES = [
-        { name: 'beginner', height: 9, width: 9, totalMines: 7, totalNegMines: 3 },
-        { name: 'intermediate', height: 16, width: 16, totalMines: 24, totalNegMines: 11 },
-        { name: 'expert', height: 16, width: 30, totalMines: 50, totalNegMines: 23 }
+        { name: 'beginner', height: 9, width: 9, totalMines: 5, totalNegMines: 5 },
+        { name: 'intermediate', height: 16, width: 16, totalMines: 18, totalNegMines: 18 },
+        { name: 'expert', height: 16, width: 30, totalMines: 40, totalNegMines: 40 }
     ];
 
     const TILE_STATUSES = {
