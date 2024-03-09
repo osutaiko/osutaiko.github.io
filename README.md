@@ -10,3 +10,6 @@ A webpage featuring a collection of popular variants of Minesweeper.
 ## Planned Variants ##
 - Radioactive: Each mine emits a radioactivity level to adjacent tiles (Original)
 - Mines that move?
+
+## TODO ##
+- Support touchscreen controls
