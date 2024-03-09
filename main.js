@@ -44,7 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
         'multimines-expert-time',
         'omega-beginner-time',
         'omega-intermediate-time',
-        'omega-expert-time'
+        'omega-expert-time',
+        'liar-beginner-time',
+        'liar-intermediate-time',
+        'liar-expert-time'
     ];
     
     for (var i = 0; i < storageKeys.length; i++) {
