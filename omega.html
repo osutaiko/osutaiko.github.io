@@ -44,7 +44,12 @@
             if they contain no mines (either positive or negative). This means all unrevealed tiles adjacent to '0's are guaranteed to contain a mine. 
             You may only chord on number tiles with exactly one unrevealed adjacent tile remaining.</p>
         <h2>Liar</h2>
-          <p>Minesweeper, but number tiles "lie" by displaying numbers as one off from the actual value.</p>
+          <p>Minesweeper, but number tiles "lie" by displaying numbers as one off from the actual value. You may only chord in the following trivial cases: 
+            <ul>
+              <li>The number of adjacent flags exceeds the value of the number tile</li>
+              <li>When only one adjecent tile is hidden, and the number of adjacent flags is exactly one greater than the value of the number tile</li>
+            </ul>
+          </p>
         <ul class = "modal-list">
           <li>[Space]: Restart game</li>
           <li>[Left Click]: Reveal tile</li>

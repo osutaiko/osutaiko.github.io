@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (mines.length === 0) {
             adjacentTiles.forEach(revealTile);
         } else { // Color code the numbers
-            const numberColors = ['ffffff', '#4600ff', '#008809', '#ff0000', '#1e007c', '#8e0000', '#008483', '#000000', '#808080'];
+            const numberColors = ['#ffffff', '#4600ff', '#008809', '#ff0000', '#1e007c', '#8e0000', '#008483', '#000000', '#808080'];
             const number = mines.length + randomNumber(2) * 2 - 1;
             tile.element.textContent = number;
             tile.element.style.color = numberColors[number];
@@ -264,9 +264,12 @@ document.addEventListener('DOMContentLoaded', () => {
         listMinesLeft();
     }
 
-    /* function handleTileChord(tile) {
+    function handleTileChord(tile) {
         const flaggedNeighbors = nearbyTiles(tile).filter(t => t.status === TILE_STATUSES.FLAGGED);
-        if (parseInt(tile.element.textContent) === flaggedNeighbors.length) {
+        const hiddenNeighbors = nearbyTiles(tile).filter(t => t.status === TILE_STATUSES.HIDDEN);
+        const number = parseInt(tile.element.textContent);
+
+        if (number < flaggedNeighbors.length || (hiddenNeighbors.length === 1 && number === flaggedNeighbors.length + 1)) {
             nearbyTiles(tile).forEach(neighbor => {
                 if (neighbor.status === TILE_STATUSES.HIDDEN) {
                     revealTile(neighbor);
@@ -274,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }
-    } */
+    }
 
     function saveBestTime() {
         localStorage.setItem('liar-' + selectedDifficulty + '-time', elapsedTime.toFixed(2));
@@ -322,10 +325,10 @@ document.addEventListener('DOMContentLoaded', () => {
             tile.element.addEventListener('mouseup', e => {
                 e.preventDefault();
                 if (e.button === 0 && isRightButtonDown) {
-                    //handleTileChord(tile);
+                    handleTileChord(tile);
                 }
                 if (e.button === 2 && isLeftButtonDown) {
-                    //handleTileChord(tile);
+                    handleTileChord(tile);
                 }
                 if (e.button === 0) {
                     isLeftButtonDown = false;

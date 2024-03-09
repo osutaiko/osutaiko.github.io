@@ -72,6 +72,11 @@ p {
   line-height: 1.5;
 }
 
+ul {
+  font-size: 14px;
+  color: #444;
+}
+
 
 table {
   border-collapse: collapse;
@@ -147,10 +152,6 @@ button:hover {
   text-decoration: none;
   color: #333;
   font-size: 13px;
-}
-
-.difficulty-option {
-  margin-right: 5px;
 }
 
 .column {
