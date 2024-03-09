@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+html, body {
+  overflow: auto;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
   background-color: #fafafa;
@@ -223,8 +227,8 @@ button:hover {
   padding: 10px;
   font-size: 35px;
   cursor: pointer;
-  max-width: 50px;
-  max-height: 50px;
+  max-width: 75px;
+  max-height: 75px;
 }
 
 .toggle-click:hover {
