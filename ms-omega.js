@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     /* Constants and Variables */
     const DIFFICULTIES = [
         { name: 'beginner', height: 9, width: 9, totalMines: 5, totalNegMines: 5 },
-        { name: 'intermediate', height: 16, width: 16, totalMines: 20, totalNegMines: 20 },
-        { name: 'expert', height: 16, width: 30, totalMines: 50, totalNegMines: 50 }
+        { name: 'intermediate', height: 16, width: 16, totalMines: 18, totalNegMines: 18 },
+        { name: 'expert', height: 16, width: 30, totalMines: 45, totalNegMines: 45 }
     ];
 
     const TILE_STATUSES = {
