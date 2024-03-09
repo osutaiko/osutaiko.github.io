@@ -277,8 +277,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function saveBestTime() {
-        localStorage.setItem(selectedDifficulty + '-time', elapsedTime.toFixed(2));
-        document.getElementById(selectedDifficulty + '-time').textContent = elapsedTime.toFixed(2);
+        localStorage.setItem('classic-' + selectedDifficulty + '-time', elapsedTime.toFixed(2));
+        document.getElementById('classic-' + selectedDifficulty + '-time').textContent = elapsedTime.toFixed(2);
     }
 
     /* Game Initialization */

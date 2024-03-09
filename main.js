@@ -36,12 +36,15 @@ document.addEventListener('DOMContentLoaded', () => {
     
     
     var storageKeys = [
-        'beginner-time',
-        'intermediate-time',
-        'expert-time',
+        'classic-beginner-time',
+        'classic-intermediate-time',
+        'classic-expert-time',
         'multi-beginner-time',
         'multi-intermediate-time',
-        'multi-expert-time'
+        'multi-expert-time',
+        'omega-beginner-time',
+        'omega-intermediate-time',
+        'omega-expert-time'
     ];
     
     for (var i = 0; i < storageKeys.length; i++) {

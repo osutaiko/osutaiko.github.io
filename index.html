@@ -35,10 +35,14 @@
       <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Classic</h2>
-          <p>The classic Minesweeper we all know and love. To win, reveal all safe tiles without clicking on any mines. 
+          <p>The classic Minesweeper experience. To win, reveal all safe tiles without clicking on any mines. 
             Numbered tiles indicate the number of mines hidden in the adjacent eight tiles.</p>
         <h2>Multimines</h2>
           <p>Minesweeper but with up to four mines per tile.</p>
+        <h2>Omega</h2>
+          <p>Minesweeper but also with negative mines. All tiles adjacent to '0's are automatically revealed
+            if they contain no mines (either positive or negative). This means all unrevealed tiles adjacent to '0's are guaranteed to contain a mine. 
+            You may only chord on tiles with exactly one unrevealed adjacent tile remaining.</p>
         <ul class = "modal-list">
           <li>[Space]: Restart game</li>
           <li>[Left Click]: Reveal tile</li>
@@ -58,9 +62,9 @@
             <th>Expert</th>
           </tr>
           <tr>
-            <td id="beginner-time"></td>
-            <td id="intermediate-time"></td>
-            <td id="expert-time"></td>
+            <td id="classic-beginner-time"></td>
+            <td id="classic-intermediate-time"></td>
+            <td id="classic-expert-time"></td>
           </tr>
         </table>
         <h2>Multimines</h2> 
@@ -110,12 +114,12 @@
       </div>
       <br>
       <div class="board-info-bar">
-        <span mines-left></span>
-        <button id="status-button">🙂</button>
-        <span id="timer">0.00</span>
+        <span mines-left title="Mines left"></span>
+        <button id="status-button" title="Restart game">🙂</button>
+        <span id="timer" title="Time">0.00</span>
       </div>
       <div class="board"></div>
-      <script src="classic.js"></script>
+      <script src="ms-classic.js"></script>
     </div>
   </div>
 </body>
