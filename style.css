@@ -315,6 +315,11 @@ button:hover {
     padding: 10px 30px 10px 30px;
   }
 
+  .column:nth-child(1) {
+    white-space: nowrap;
+    overflow-x: scroll;
+  }
+
   .column:nth-child(2) {
     padding-top: 20px;
   }
