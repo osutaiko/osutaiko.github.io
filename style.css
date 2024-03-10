@@ -85,6 +85,9 @@ ul {
   color: #444;
 }
 
+hr {
+  margin: 10px 0px 10px 0px;
+}
 
 table {
   border-collapse: collapse;
@@ -292,6 +295,10 @@ button:hover {
     text-decoration: none;
     color: #333;
     font-size: 16px;
+  }
+
+  hr {
+    margin: 0px 10px 0px 10px 
   }
 
   .container {
