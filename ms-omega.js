@@ -344,6 +344,18 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('omega-' + selectedDifficulty + '-time').textContent = elapsedTime.toFixed(2);
     }
 
+    function toggleFlagOverlay() {
+        board.forEach(row => {
+            row.forEach(tile => {
+                if (isRightClickToggled && tile.status === TILE_STATUSES.HIDDEN) {
+                    tile.element.classList.add('overlay-flag');
+                } else {
+                    tile.element.classList.remove('overlay-flag');
+                }
+            });
+        });
+    }
+
     /* Game Initialization */
     const urlParams = new URLSearchParams(window.location.search);
     const selectedDifficulty = urlParams.get('difficulty') || 'beginner'; // Get game difficulty from url; beginner if not specified
@@ -380,6 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleClickButton.addEventListener('click', () => {
             isRightClickToggled = !isRightClickToggled;
             toggleClickButton.textContent = isRightClickToggled ? '🚩' : '⛏️';
+            toggleFlagOverlay();
         });
     }
 
@@ -397,6 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (thisButton === 2) { // RMB
                     isRightButtonDown = true;
                     handleTileRightClick(tile);
+                    toggleFlagOverlay();
                 }
             });
 
