@@ -1,3 +1,5 @@
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const DIFFICULTY_SETTINGS = { width: 30, totalMines: 180 };
 
