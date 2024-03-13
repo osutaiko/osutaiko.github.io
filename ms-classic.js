@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
             
-            var bestTime = localStorage.getItem(selectedDifficulty + '-time');
+            var bestTime = localStorage.getItem('classic-' + selectedDifficulty + '-time');
             if (bestTime === null || elapsedTime < bestTime) {
                 saveBestTime();
             }
