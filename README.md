@@ -1,4 +1,4 @@
-## Minesweeper Variants: [Play Now](https://osutaiko.github.io/index.html) ##
+## Inesweeper: [Play Now](https://osutaiko.github.io/index.html) ##
 A webpage featuring a collection of popular variants of Minesweeper.
 
 ## Currently Supported Variants ##
