@@ -12,3 +12,6 @@ A webpage featuring a collection of popular variants of Minesweeper.
 - Radioactive: Each mine emits a radioactivity level to adjacent tiles (Original)
 - No guessing mode for classic
 - Mines that move?
+
+## TODO ##
+- Board customization (height, width, totalMines)
