@@ -162,6 +162,9 @@ button:hover {
   cursor: pointer;
 }
 
+#settings-button::after {
+  content: "Settings";
+}
 #help-button::after {
   content: "How to Play";
 }
@@ -218,10 +221,33 @@ button:hover {
   content: 'Expert';
 }
 
-.toggle-click {
+#toggle-location {
+  border: 2px solid #ddd;
+  color: #444;
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#toggle-location::after {
+  content: '\25BE';
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+}
+
+#toggle-location option {
+  background-color: #fff;
+  color: #333;
+}
+
+#toggle-location:hover {
+  background-color: #f0f0f0;
+}
+
+#toggle-button {
   position: fixed;
-  bottom: 0px;
-  right: 0px;
   z-index: 9999; /* Ensure button stays on top */
   background-color: #333;
   border: 3px solid #444;
@@ -230,7 +256,29 @@ button:hover {
   cursor: pointer;
 }
 
-.toggle-click:hover {
+#toggle-button.bottom-right {
+  bottom: 0px;
+  right: 0px;
+}
+
+#toggle-button.bottom-left {
+  bottom: 0px;
+  left: 0px;
+}
+
+#toggle-button.center-right {
+  bottom: 50%;
+  right: 0px;
+  transform: translate(0%, 50%);
+}
+
+#toggle-button.center-left {
+  bottom: 50%;
+  left: 0px;
+  transform: translate(0%, 50%);
+}
+
+#toggle-button:hover {
   background-color: #666;
 }
 
@@ -285,7 +333,7 @@ input {
     margin: 0px 10px 0px 10px 
   }
 
-  #help-button, #mytimes-button, #github-button {
+  #help-button, #mytimes-button, #github-button, #settings-button {
     padding: 0;
     width: 35px;
     height: 35px;
@@ -345,6 +393,9 @@ input {
     width: 350px;
   }
 
+  #settings-button::after {
+    content: "⚙️";
+  }
   #help-button::after {
     content: "❔";
   }

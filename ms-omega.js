@@ -237,6 +237,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             boardElement.addEventListener('mousedown', stopProp, { capture: true });
             boardElement.addEventListener('mouseup', stopProp, { capture: true });
+
+            if (isRightClickToggled) {
+                isRightClickToggled = false;
+                toggleFlagOverlay();
+            }
         }
 
         if (is_win) {
@@ -384,11 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var isRightClickToggled = false;
     //if (isTouchDevice)
     {
-        var toggleClickButton = document.createElement('button');
-        toggleClickButton.id = 'toggle-click';
-        toggleClickButton.className = 'toggle-click';
-        toggleClickButton.innerHTML = '⛏️';
-        document.body.appendChild(toggleClickButton);
+        var toggleClickButton = document.getElementById('toggle-button');
         toggleClickButton.addEventListener('click', () => {
             isRightClickToggled = !isRightClickToggled;
             toggleClickButton.textContent = isRightClickToggled ? '🚩' : '⛏️';

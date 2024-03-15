@@ -38,11 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //if (isTouchDevice)
     {
-        var toggleClickButton = document.createElement('button');
-        toggleClickButton.id = 'toggle-click';
-        toggleClickButton.className = 'toggle-click';
-        toggleClickButton.innerHTML = '⛏️';
-        document.body.appendChild(toggleClickButton);
+        var toggleClickButton = document.getElementById('toggle-button');
         toggleClickButton.addEventListener('click', () => {
             isRightClickToggled = !isRightClickToggled;
             toggleClickButton.textContent = isRightClickToggled ? '🚩' : '⛏️';
