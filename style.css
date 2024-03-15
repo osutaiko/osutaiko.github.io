@@ -57,8 +57,8 @@ body {
   margin: 0;
 }
 
-.logo::after {
-  content: "Minesweeper Variants";
+hr {
+  margin: 10px 0px 10px 0px;
 }
 
 h1 {
@@ -203,6 +203,7 @@ button:hover {
   text-decoration: none;
   color: #333;
   font-size: 18px;
+  white-space: nowrap;
 }
 
 #beginner::after {
@@ -247,6 +248,16 @@ button:hover {
   opacity: 0.1;
 }
 
+input {
+  border: 2px solid #ccc;
+  padding: 8px;
+}
+
+#roomCreationMessage {
+  margin: 8px;
+  font-size: 16px;
+}
+
 @media screen and (max-width: 1024px) {
   h1 {
     font-size: 25px;
@@ -268,6 +279,10 @@ button:hover {
     cursor: pointer;
     background-color: #ddd;
     color: #000;
+  }
+
+  hr {
+    margin: 0px 10px 0px 10px 
   }
 
   #help-button, #mytimes-button, #github-button {
@@ -348,11 +363,6 @@ button:hover {
 
   ul {
     font-size: 13px;
-  }
-
-  .logo::after {
-    font-size: 30px;
-    content: "💥";
   }
 
   .gamemode-list li {
@@ -567,4 +577,14 @@ button:hover {
 
 .board>[data-status="neg-flagged"]:after {
   content: "🏳️";
+}
+
+
+
+.board>[data-status="revealed-blue"] {
+  background-color: #ccf;
+}
+
+.board>[data-status="revealed-red"] {
+  background-color: #fcc;
 }
