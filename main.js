@@ -9,6 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const helpModal = document.getElementById('modal-help');
     const settingsModal = document.getElementById('modal-settings');
 
+    const toggleLocationSelect = document.getElementById('toggle-location');
+    const gridSizeSlider = document.getElementById('grid-size-slider');
+    const gridSizeDisplay = document.getElementById('grid-size-display');
+    const boardElement = document.querySelector('.board');
+    const infoBar = document.querySelector('.board-info-bar');
+    const defaultSettingsButton = document.getElementById('default-settings');
+
     githubButton.addEventListener('click', () => {
         window.location.href = "https://github.com/osutaiko/osutaiko.github.io";
     });
@@ -41,30 +48,59 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const toggleLocationSelect = document.getElementById('toggle-location');
-
-    // Retrieve toggle button location from localStorage, defaulting to 'bottom-right'
     const toggleLocation = localStorage.getItem('toggleLocation') || 'bottom-right';
     toggleLocationSelect.value = toggleLocation;
 
-    // Update toggle button location
     function updateToggleButtonLocation(location) {
         const toggleButton = document.getElementById('toggle-button');
         toggleButton.classList.remove('bottom-right', 'bottom-left', 'center-right', 'center-left');
         toggleButton.classList.add(location);
     }
 
-    // Update toggle button location based on dropdown selection
     toggleLocationSelect.addEventListener('change', () => {
         const selectedLocation = toggleLocationSelect.value;
         localStorage.setItem('toggleLocation', selectedLocation);
         updateToggleButtonLocation(selectedLocation);
     });
 
-    // Set initial toggle button location
     updateToggleButtonLocation(toggleLocation);
 
-    
+    let gridSize = parseInt(localStorage.getItem('gridSize')) || 25;
+    gridSizeSlider.value = gridSize;
+    gridSizeDisplay.textContent = gridSize;
+
+    function updateGridSize(size) {
+        gridSize = size;
+        localStorage.setItem('gridSize', size);
+
+        const boardWidth = parseInt(getComputedStyle(boardElement).getPropertyValue('--board-width'));
+        const boardHeight = parseInt(getComputedStyle(boardElement).getPropertyValue('--board-height'));
+
+        boardElement.style.setProperty('--grid-size', `${size}px`);
+        boardElement.style.gridTemplateColumns = `repeat(${boardWidth}, ${size}px)`;
+        boardElement.style.gridTemplateRows = `repeat(${boardHeight}, ${size}px)`;
+
+        const boardWidthPixels = size * boardWidth;
+        infoBar.style.width = `${boardWidthPixels + 10}px`;
+        gridSizeDisplay.textContent = size;
+    }
+
+    gridSizeSlider.addEventListener('input', function() {
+        const selectedSize = parseInt(gridSizeSlider.value);
+        updateGridSize(selectedSize);
+    });
+
+    window.addEventListener('load', function() {
+        updateGridSize(gridSize);
+    });
+
+    updateGridSize(gridSize);
+
+    defaultSettingsButton.addEventListener('click', function() {
+        localStorage.removeItem('toggleLocation');
+        localStorage.removeItem('gridSize');
+        location.reload(false);
+    });
     
     var storageKeys = [
         'classic-beginner-time',

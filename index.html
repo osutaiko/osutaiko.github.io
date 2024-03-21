@@ -12,7 +12,7 @@
   </script>
 
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=0">
   <title>Classic | Inesweeper</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -42,6 +42,9 @@
           <option value="center-left">Center Left</option>
           <option value="center-right">Center Right</option>
         </select>
+        <h2>Grid Cell Size: <span id="grid-size-display">25</span></h2>
+        <input type="range" id="grid-size-slider" min="20" max="50" value="25">
+        <button id="default-settings">Restore to Default</button>
       </div>
     </div>
     <div id="modal-help" class="modal">

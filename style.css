@@ -85,6 +85,9 @@ ul {
   color: #444;
 }
 
+select {
+  margin-bottom: 40px;
+}
 
 table {
   border-collapse: collapse;
@@ -499,8 +502,6 @@ input {
 }
 
 .board>* {
-  width: 25px;
-  height: 25px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -508,7 +509,7 @@ input {
   border: 1px solid #aaa;
   box-sizing: border-box;
   user-select: none;
-  font-size: 18px;
+  font-size: calc(var(--grid-size) * 0.72);
   font-family: 'Courier New', Courier, monospace;
   font-weight: 900;
 }
