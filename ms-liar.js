@@ -373,7 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
 
-                if (isTouchDevice && !isRightClickToggled && tile.status === TILE_STATUSES.REVEALED) {
+                if (isTouchDevice && tile.status === TILE_STATUSES.REVEALED) {
                     handleTileChord(tile);
                 }
             });
